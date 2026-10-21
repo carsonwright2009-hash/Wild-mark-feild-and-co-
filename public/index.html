@@ -71,6 +71,9 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;p
 .ownb{font:inherit;font-size:13px;border:1px solid var(--line);background:none;color:inherit;border-radius:999px;padding:2px 10px;cursor:pointer}.row.own .n{opacity:.65}
 textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .lock{margin:8px 0 0}.pcard{margin-top:14px}.frow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.frow input{width:70px}.frow span small{display:block;color:var(--mute)}
+.bdg{background:var(--ochre);color:#fff;border-radius:999px;font-size:11px;font-weight:700;padding:2px 8px;margin-left:8px;letter-spacing:.05em;vertical-align:middle}
+.wb{display:flex;align-items:center;gap:8px;font-size:14px;margin:6px 0}.wb span:first-child{width:92px}.wb i{display:block;height:10px;background:var(--green);border-radius:3px}.wb span:last-child{white-space:nowrap;color:var(--mute)}
+.cd{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}.cd small{display:block;color:var(--mute)}.cd.late{opacity:.55}
 #packet{display:none}
 @media print{body.pk>*:not(#packet){display:none!important}body.pk #packet{display:block;padding:16px;color:#000;background:#fff;font:14px/1.5 system-ui,sans-serif}#packet h1{font-size:24px;margin:0}#packet h2{margin:14px 0 4px;font-size:16px}#packet p{margin:2px 0}}
 @media print{.hero,#builder,.actions,#savedWrap,.fine{display:none}body{background:#fff;color:#000}}
@@ -86,7 +89,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 </div>
 </header>
 <main class="wrap">
-<div class="card" id="authBox"><span id="acct">Sign in to save kits and use Premium on any device.</span><div class="af" id="authForm"><label>Email<input type="text" id="aem" autocomplete="email"></label><button type="button" class="btn alt" id="aGo">Email me a sign-in link</button></div><button type="button" class="btn alt" id="aOut" hidden style="margin-top:8px">Sign out</button></div>
+<div class="card" id="authBox"><span id="acct">Sign in to save kits and use Premium on any device.</span><span id="badge" class="bdg" hidden>PREMIUM</span><div class="af" id="authForm"><label>Email<input type="text" id="aem" autocomplete="email"></label><button type="button" class="btn alt" id="aGo">Email me a sign-in link</button></div><button type="button" class="btn alt" id="aOut" hidden style="margin-top:8px">Sign out</button></div>
 <h2>Gear builder</h2>
 <form class="card" id="builder" onsubmit="return false">
 <div class="grid">
@@ -119,6 +122,10 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <div class="card pcard"><h3>Food planner</h3><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody"><label for="cal">Calories you want per day</label><input type="number" id="cal" value="3000" style="max-width:120px"><div id="foodRows"></div><p id="foodSum" style="margin:10px 0 0"></p></div></div>
 <div class="card pcard"><h3>Group hunt</h3><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody"><label for="gnames">Hunters (names, separated by commas)</label><input type="text" id="gnames" placeholder="Me, Jake, Sam"><div id="grows"></div><div id="gsum"></div></div></div>
 <div class="card pcard"><h3>Trip packet</h3><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody"><p class="hint" style="margin-top:0">Prints your kit, check-in plan and checklist. In the print window, choose Save as PDF.</p><button type="button" class="btn alt" id="pkt">Create trip packet</button></div></div>
+<div class="card pcard"><h3>Weight breakdown</h3><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody"><div id="wbk"></div></div></div>
+<div class="card pcard"><h3>Budget optimizer</h3><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody"><label for="bmax">Gear budget to spend now ($)</label><input type="number" id="bmax" value="500" min="0" style="max-width:140px"><div id="bopt"></div></div></div>
+<div class="card pcard"><h3>Countdown and reminders</h3><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody"><p class="hint" id="cdh" style="margin-top:0"></p><div id="cdl"></div><button type="button" class="btn alt" id="ics" style="margin-top:12px">Add reminders to my calendar</button></div></div>
+<div class="card pcard"><h3>Offline field card</h3><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody"><p class="hint" style="margin-top:0">Download your kit as one file that opens with no signal, with checkboxes that remember what you packed. Save it to your phone's Files app.</p><button type="button" class="btn alt" id="off">Download offline field card</button></div></div>
 <div id="trip">
 <div class="card" style="margin-top:14px"><h3>Before you go</h3>
 <label class="chk"><input type="checkbox" data-k="c1"> License purchased</label>
@@ -145,7 +152,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 
 <section id="pricing"><h2>Wildmark Premium</h2><div class="grid">
 <div class="card"><h3>Free</h3><p class="hint">$0</p><p style="margin:8px 0 0">Gear builder and category picks<br>Gear library and printing<br>Up to 2 saved kits<br>Hunt journal and check-in plan</p></div>
-<div class="card" style="border:2px solid var(--green)"><h3>Premium</h3><p style="margin:6px 0"><b id="price">$10.99</b> per month</p><p style="margin:8px 0 0">Unlimited saved kits, synced across devices<br>Group hunts and food planner<br>PDF trip packets</p><button class="btn" id="goPro">Go Premium</button><p class="hint" id="proMsg"></p></div></div></section>
+<div class="card" style="border:2px solid var(--green)"><h3>Premium</h3><p style="margin:6px 0"><b id="price">$10.99</b> per month</p><p style="margin:8px 0 0">Unlimited saved kits, synced across devices<br>Group hunts and food planner<br>Budget optimizer and weight breakdown<br>Hunt countdown with calendar reminders<br>Offline field card and PDF trip packets</p><button class="btn" id="goPro">Go Premium</button><p class="hint" id="proMsg"></p></div></div></section>
 <section><h2>Hunt journal</h2><div class="card"><label for="jn">What worked and what you left unused</label><textarea id="jn" rows="3"></textarea><button class="btn" id="jadd">Add entry</button><div id="jl"></div></div></section>
 <section><h2>About Wildmark Field Co.</h2><div class="card"><p style="margin:0">Wildmark builds gear lists for hunters who want to carry what they need and nothing they do not. Tell us the hunt and we size the kit to the game, the weather and your pack. Hunt prepared.</p></div></section>
 <section><h2>Gear library</h2><input type="text" id="lq" placeholder="Search gear" oninput="lib()"><div class="card" style="overflow-x:auto;margin-top:10px" id="lib"></div></section>
@@ -357,7 +364,37 @@ function group(){var n=names(),sh=cur.items.filter(function(i){return SHARED.ind
  var tot=cur.items.reduce(function(a,i){return a+i.lb},0),shw=sh.reduce(function(a,i){return a+i.lb},0),per={};n.forEach(function(x){per[x]=0});
  [].forEach.call($('grows').querySelectorAll('select'),function(el){var it=sh.filter(function(i){return i.n==el.dataset.g})[0];per[el.value]+=it.lb});
  $('gsum').innerHTML='<p class="hint">Each hunter also carries '+(tot-shw).toFixed(1)+' lb of personal gear.</p>'+n.map(function(x){return'<p><b>'+esc(x)+'</b>: '+(tot-shw+per[x]).toFixed(1)+' lb total ('+per[x].toFixed(1)+' lb shared)</p>'}).join('')}
-function pro(){food();group();gate()}
+function wbk(){var c={},tw=0,base=0,all=[];
+ cur.items.forEach(function(i){c[i.cat]=(c[i.cat]||0)+i.lb;tw+=i.lb;if(i.cat!='Food'&&i.cat!='Water')base+=i.lb;all.push(i)});
+ var mx=Math.max.apply(null,Object.keys(c).map(function(k){return c[k]}).concat([0.01]));
+ var h='<p style="margin:0 0 8px"><b>'+tw.toFixed(1)+' lb total</b> · base weight (no food or water) <b>'+base.toFixed(1)+' lb</b></p>'+Object.keys(c).sort(function(a,b){return c[b]-c[a]}).map(function(k){return'<div class="wb"><span>'+esc(k)+'</span><i style="width:'+Math.max(2,Math.round(c[k]/mx*100))+'%;flex:0 0 auto;max-width:55%"></i><span>'+c[k].toFixed(1)+' lb · '+Math.round(c[k]/(tw||1)*100)+'%</span></div>'}).join('');
+ all.sort(function(a,b){return b.lb-a.lb});
+ h+='<p class="hint" style="margin-top:14px"><b>Five heaviest items</b></p>'+all.slice(0,5).map(function(i){var s=SW[i.n];return'<div class="cd"><span>'+esc(i.n)+(i.q>1?' × '+i.q:'')+(s?'<small>Lighter option: '+esc(s[0])+' (saves about '+s[1]*i.q+' oz)</small>':'')+'</span><span>'+i.lb.toFixed(1)+' lb</span></div>'}).join('');
+ $('wbk').innerHTML=h}
+function bopt(){var B=Math.max(0,+$('bmax').value||0),rk={High:0,Med:1,Low:2},left=cur.items.filter(function(i){return!OWN[i.n]&&i.pr>0}).sort(function(a,b){return rk[a.pri]-rk[b.pri]||a.pr-b.pr}),spent=0,now=[],later=[],lt=0;
+ left.forEach(function(i){if(spent+i.pr<=B){spent+=i.pr;now.push(i)}else{later.push(i);lt+=i.pr}});
+ var li=function(a){return a.map(function(i){return'<div class="cd"><span>'+esc(i.n)+(i.q>1?' × '+i.q:'')+'<small>'+i.pri+' priority</small></span><span>$'+Math.round(i.pr)+'</span></div>'}).join('')||'<p class="hint">Nothing here.</p>'};
+ $('bopt').innerHTML='<p class="hint"><b>Buy now: $'+Math.round(spent)+' of your $'+Math.round(B)+'</b>. High priority items come first, cheapest first within each level. Items you marked as owned are skipped.</p>'+li(now)+'<p class="hint" style="margin-top:14px"><b>Buy later: $'+Math.round(lt)+'</b></p>'+li(later)}
+function plan(){var v=$('when').value;if(!v)return null;var d=new Date(v+'T00:00:00');if(isNaN(d))return null;var w=cur.c.weap,sight=w=='Bow'?'Tune your bow and shoot groups at your hunting distances':w=='Shotgun'?'Pattern your shotgun and load on paper':w=='Muzzleloader'?'Sight in your muzzleloader with your hunting load':'Sight in your rifle and confirm your zero';
+ var left=cur.items.filter(function(i){return!OWN[i.n]&&i.pr>0}).length;
+ return[[60,'Check season dates, tag deadlines and draw results for your unit'],[45,'Buy your license and tags'],[30,'Order the '+left+' item'+(left==1?'':'s')+' you still need'],[21,sight],[14,'Break in boots and test your pack with a full load'],[7,'Check the forecast, fire restrictions and road closures. Send your check-in plan'],[3,'Pack your kit, charge devices and download offline maps'],[1,'Final check: license, tags, hunter education card, fuel']].map(function(t){var x=new Date(d);x.setDate(x.getDate()-t[0]);return{d:x,t:t[1],o:t[0]}})}
+function cd(){var p=plan();$('ics').hidden=!p;if(!p){$('cdh').textContent='Pick a hunt start date in the builder to see your countdown.';$('cdl').innerHTML='';return}
+ var td=new Date();td.setHours(0,0,0,0);var s=new Date($('when').value+'T00:00:00'),n=Math.round((s-td)/864e5);
+ $('cdh').innerHTML='<b>'+(n>0?n+' day'+(n==1?'':'s')+' until your hunt':n==0?'Your hunt starts today':'Your hunt date has passed')+'</b>. Dates are suggestions. Confirm real deadlines with your wildlife agency.';
+ $('cdl').innerHTML=p.map(function(x){var dd=Math.round((x.d-td)/864e5);return'<div class="cd'+(dd<0?' late':'')+'"><span>'+esc(x.t)+'</span><span style="text-align:right;white-space:nowrap">'+x.d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+'<small>'+(dd<0?'passed':dd==0?'today':'in '+dd+' day'+(dd==1?'':'s'))+'</small></span></div>'}).join('')}
+function dl(name,type,text){var b=new Blob([text],{type:type}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500)}
+var fn=function(){return(($('kname').value||cur.c.game+' hunt').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''))||'kit'};
+$('ics').onclick=function(){if(!PRO||!cur)return;var p=plan();if(!p)return;var z=function(n){return(n<10?'0':'')+n},ds=function(d){return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())},st=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,''),nm=$('kname').value||cur.c.game+' hunt',L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Wildmark Field Co.//Hunt countdown//EN'];
+ p.forEach(function(x,k){var e=new Date(x.d);e.setDate(e.getDate()+1);L.push('BEGIN:VEVENT','UID:wm-'+Date.now()+'-'+k+'@wildmarkfieldco.com','DTSTAMP:'+st,'DTSTART;VALUE=DATE:'+ds(x.d),'DTEND;VALUE=DATE:'+ds(e),'SUMMARY:'+(nm+': '+x.t).replace(/[\\;,]/g,' ').replace(/\r?\n/g,' '),'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Hunt reminder','TRIGGER:PT9H','END:VALARM','END:VEVENT')});
+ L.push('END:VCALENDAR');dl('wildmark-'+fn()+'.ics','text/calendar',L.join('\r\n'))};
+$('off').onclick=function(){if(!PRO||!cur)return;var c=cur.c,cats={},tw=0,tp=0,h='';cur.items.forEach(function(i){(cats[i.cat]=cats[i.cat]||[]).push(i);tw+=i.lb;tp+=i.pr});var nm=$('kname').value||c.game+' hunt',sk='wm_'+fn(),k=0;
+ h+='<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(nm)+'</title><style>body{font:16px/1.5 system-ui,sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#f3f1ea;color:#242826}h1{font-family:Georgia,serif;margin:0}h2{margin:22px 0 6px;border-bottom:2px solid #1f3a2e;font-size:18px}label{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #d8d4c6}input{width:22px;height:22px;accent-color:#1f3a2e;flex:none}.d{opacity:.5;text-decoration:line-through}small{color:#666d66}</style></head><body><h1>'+esc(nm)+'</h1><p>'+esc(c.game)+' | '+esc(c.weap)+' | '+esc(c.ter)+' | '+c.days+' day'+(c.days>1?'s':'')+(Object.keys(c.wx).length?' | '+esc(Object.keys(c.wx).join(', ')):'')+(c.loc?' | '+esc(c.loc):'')+'<br><small>About '+tw.toFixed(1)+' lb. Wildmark Field Co. Works offline. Estimates only; check rules with your state wildlife agency.</small></p>';
+ Object.keys(cats).forEach(function(cat){h+='<h2>'+esc(cat)+'</h2>'+cats[cat].map(function(i){return'<label><input type="checkbox" data-i="'+(k++)+'"><span>'+esc(i.n)+(i.q>1?' x '+i.q:'')+(OWN[i.n]?' <small>(owned)</small>':'')+'<br><small>'+(i.lb*16).toFixed(0)+' oz</small></span></label>'}).join('')});
+ h+='<h2>Check-in plan</h2><p>Who knows the plan: '+esc(PL.who||'')+' '+esc(PL.ph||'')+'<br>Parking: '+esc(PL.park||'')+'<br>Turnaround time: '+esc(PL.turn||'')+'<br>Route: '+esc(PL.route||'')+'</p>';
+ h+='<script>(function(){var K='+JSON.stringify(sk)+',S={};try{S=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}var a=document.querySelectorAll("input[data-i]");for(var i=0;i<a.length;i++){(function(el){var n=el.dataset.i;el.checked=!!S[n];el.parentNode.className=el.checked?"d":"";el.onchange=function(){S[n]=el.checked;el.parentNode.className=el.checked?"d":"";try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}})(a[i])}})()<\/script></body></html>';
+ dl('wildmark-'+fn()+'.html','text/html',h)};
+$('when').addEventListener('change',function(){if(cur)cd()});$('bmax').addEventListener('input',function(){if(cur)bopt()});
+function pro(){food();group();wbk();bopt();cd();gate()}
 $('foodRows').addEventListener('input',function(e){var i=e.target.dataset.f;if(i==null)return;FQ[i]=+e.target.value||0;save2();food()});
 $('cal').addEventListener('input',function(){if(cur)food()});
 $('gnames').addEventListener('input',function(e){GN=e.target.value;save2();var p=e.target.selectionStart;group();$('gnames').focus();try{$('gnames').setSelectionRange(p,p)}catch(x){}});
@@ -384,7 +421,7 @@ $('wxBtn').onclick=async function(){var l=$('loc').value.trim();if(!l)return inf
 if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});
 var SB_URL='https://kwsdkzuqknpaonfhlxjx.supabase.co',SB_KEY='sb_publishable_kysx2jywIXXCCR0SMKNzkg_h63mtgsE',SB=null,USER=null,SESS=null,SYNCED=null;
 var UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-function setPro(on){PRO=on;gate();$('proMsg').textContent=on?'Premium is active. Thank you.':'';$('goPro').textContent=on?'Manage subscription':'Go Premium'}
+function setPro(on){PRO=on;gate();$('badge').hidden=!on;$('proMsg').textContent=on?'Premium is active. Thank you.':'';$('goPro').textContent=on?'Manage subscription':'Go Premium'}
 async function api(n,o){o=o||{};o.headers=Object.assign({Authorization:'Bearer '+(SESS?SESS.access_token:'')},o.headers||{});var r=await fetch('/.netlify/functions/'+n,o);return r.json()}
 function dbSave(k){if(!SB||!USER)return;SB.from('kits').insert({name:k.name,data:k}).select('id').single().then(function(r){if(r.error||!r.data)return;var a=kits();a.forEach(function(x){if(x.id===k.id)x.id=r.data.id});put(a);list()})}
 function dbDel(k){if(SB&&USER&&k&&UUID.test(k.id))SB.from('kits').delete().eq('id',k.id).then(function(){})}
