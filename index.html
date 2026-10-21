@@ -91,7 +91,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <form class="card" id="builder" onsubmit="return false">
 <div class="grid">
 <div><label for="game">Game</label><select id="game"><option>Elk</option><option>Mule deer</option><option>Whitetail</option><option>Turkey</option><option>Waterfowl</option><option>Small game</option></select></div>
-<div><label for="weap">Weapon</label><select id="weap"><option>Rifle</option><option>Bow</option><option>Muzzleloader</option></select></div>
+<div><label for="weap">Weapon</label><select id="weap"><option>Rifle</option><option>Bow</option><option>Muzzleloader</option><option>Shotgun</option></select></div>
 <div><label for="loc">Location</label><input type="text" id="loc" placeholder="Roosevelt National Forest, CO"></div>
 <div><label for="when">Hunt start date</label><input type="date" id="when"></div>
 <div><label for="ter">Terrain</label><select id="ter"><option>Mountains</option><option>Forest</option><option>Desert</option><option>Prairie</option><option>Wetlands</option></select></div>
@@ -164,6 +164,9 @@ var not=function(c){return c.trip!='Day hunt'};
 var I=[
 ['Hunting license and tags','Legal',0,0,'High',function(){return 1}],
 ['Blaze orange vest','Safety',8,25,'High',function(c){return c.weap!='Bow'&&big(c)?1:0}],
+['Federal Duck Stamp and state waterfowl permits','Legal',0,30,'High',function(c){return c.game=='Waterfowl'?1:0}],
+['Shooting glasses','Safety',3,25,'High',function(c){return c.weap=='Shotgun'?1:0}],
+['Hearing protection','Safety',4,60,'High',function(c){return c.weap=='Shotgun'||c.weap=='Rifle'?1:0}],
 ['Headlamp','Safety',3,45,'High',function(){return 1}],
 ['Spare batteries','Safety',2,10,'Med',function(){return 1}],
 ['First-aid kit','Safety',6,30,'High',function(){return 1}],
@@ -181,18 +184,35 @@ var I=[
 ['Game bags','Field',2,14,'High',function(c){return c.game=='Elk'?4:big(c)?2:0}],
 ['Field-dressing gloves (pair)','Field',1,12,'Med',function(c){return big(c)?2:0}],
 ['Bone saw','Field',5,35,'Low',function(c){return c.game=='Elk'?1:0}],
-['Game call','Field',2,30,'High',function(c){return /Elk|Turkey|Waterfowl/.test(c.game)?1:0}],
-['Decoys (half dozen)','Field',48,90,'High',function(c){return /Turkey|Waterfowl/.test(c.game)?1:0}],
+['Game call','Field',2,30,'High',function(c){return /Elk|Turkey/.test(c.game)?1:0}],
+['Decoys (half dozen)','Field',48,90,'High',function(c){return c.game=='Turkey'?1:0}],
+['Duck decoys (dozen)','Field',128,110,'High',function(c){return c.game=='Waterfowl'?(c.days>2?3:2):0}],
+['Goose decoys (half dozen)','Field',72,110,'Med',function(c){return c.game=='Waterfowl'?1:0}],
+['Decoy anchors and cord','Field',16,20,'High',function(c){return c.game=='Waterfowl'?1:0}],
+['Decoy bag or sled','Field',24,45,'Med',function(c){return c.game=='Waterfowl'?2:0}],
+['Motion decoy (spinning wing or jerk cord)','Field',40,90,'Low',function(c){return c.game=='Waterfowl'?1:0}],
+['Blind brush and camo netting','Field',16,30,'Med',function(c){return c.game=='Waterfowl'?1:0}],
+['Duck and goose calls on lanyard','Field',3,35,'High',function(c){return c.game=='Waterfowl'?1:0}],
+['Game strap','Field',4,12,'Med',function(c){return c.game=='Waterfowl'?1:0}],
+['Shell bag or vest','Field',10,35,'Med',function(c){return c.game=='Waterfowl'&&c.weap=='Shotgun'?1:0}],
 ['Pop-up blind','Field',80,150,'Med',function(c){return /Turkey|Waterfowl|Whitetail/.test(c.game)?1:0}],
 ['Tree stand and harness','Field',240,250,'High',function(c){return c.game=='Whitetail'?1:0}],
 ['Scent-control spray','Field',12,15,'Low',function(c){return c.game=='Whitetail'?1:0}],
 ['Game pouch','Field',3,20,'Med',function(c){return c.game=='Small game'||c.game=='Turkey'?1:0}],
 ['Binoculars','Optics',24,350,'High',function(c){return big(c)?1:0}],
 ['Rangefinder','Optics',7,200,'Med',function(c){return big(c)?1:0}],
-['Rifle sling','Weapon',6,40,'Med',function(c){return c.weap!='Bow'?1:0}],
+['Rifle sling','Weapon',6,40,'Med',function(c){return c.weap=='Rifle'||c.weap=='Muzzleloader'?1:0}],
 ['Ammunition (box of 20)','Weapon',16,45,'High',function(c){return c.weap=='Rifle'?1:0}],
 ['Powder, bullets and primers','Weapon',12,40,'High',function(c){return c.weap=='Muzzleloader'?1:0}],
 ['Ramrod and cleaning jag','Weapon',5,20,'Med',function(c){return c.weap=='Muzzleloader'?1:0}],
+['Non-toxic steel shells (box of 25)','Weapon',40,30,'High',function(c){return c.weap=='Shotgun'&&c.game=='Waterfowl'?Math.min(c.days+1,5):0}],
+['Turkey loads (box of 10)','Weapon',18,25,'High',function(c){return c.weap=='Shotgun'&&c.game=='Turkey'?1:0}],
+['Small-game shells (box of 25)','Weapon',38,18,'High',function(c){return c.weap=='Shotgun'&&c.game=='Small game'?1:0}],
+['Shotgun shells (box of 25)','Weapon',38,22,'High',function(c){return c.weap=='Shotgun'&&/Elk|Mule deer|Whitetail/.test(c.game)?1:0}],
+['Choke tubes and wrench','Weapon',3,45,'Med',function(c){return c.weap=='Shotgun'?1:0}],
+['Extra-full turkey choke','Weapon',2,50,'Med',function(c){return c.weap=='Shotgun'&&c.game=='Turkey'?1:0}],
+['Shotgun case','Weapon',48,50,'Med',function(c){return c.weap=='Shotgun'?1:0}],
+['Shotgun cleaning kit','Weapon',10,25,'Low',function(c){return c.weap=='Shotgun'?1:0}],
 ['Release aid','Weapon',4,90,'High',function(c){return c.weap=='Bow'?1:0}],
 ['Arrows with broadheads','Weapon',3,15,'High',function(c){return c.weap=='Bow'?6:0}],
 ['Spare bowstring and tools','Weapon',6,35,'Low',function(c){return c.weap=='Bow'?1:0}],
@@ -209,6 +229,9 @@ var I=[
 ['Lightweight sun shirt','Clothing',6,60,'Med',function(c){return c.wx.Hot?1:0}],
 ['Insect repellent','Clothing',3,10,'Low',function(c){return c.wx.Hot||c.ter=='Wetlands'?1:0}],
 ['Waders','Clothing',60,160,'High',function(c){return c.game=='Waterfowl'?1:0}],
+['Wader belt and patch kit','Clothing',4,15,'Low',function(c){return c.game=='Waterfowl'?1:0}],
+['Camo face mask and gloves','Clothing',4,25,'High',function(c){return c.game=='Waterfowl'||c.game=='Turkey'?1:0}],
+['Fleece layer for under waders','Clothing',16,60,'Med',function(c){return c.game=='Waterfowl'&&(c.wx.Cold||c.wx.Snow||c.wx.Wind)?1:0}],
 ['Daypack','Camp',32,120,'High',function(c){return c.trip=='Day hunt'?1:0}],
 ['Frame pack','Camp',64,260,'High',function(c){return not(c)?1:0}],
 ['Tent or shelter','Camp',48,300,'High',function(c){return not(c)?1:0}],
@@ -245,12 +268,12 @@ var OPEN={};
 var ST={rei:['REI','https://www.rei.com'],sw:['Sportsman\u2019s Warehouse','https://www.sportsmans.com'],bp:['Bass Pro Shops','https://www.basspro.com'],mw:['MidwayUSA','https://www.midwayusa.com'],am:['Amazon','https://www.amazon.com'],bc:['Backcountry','https://www.backcountry.com'],vx:['Vortex Optics','https://vortexoptics.com'],lp:['Leupold','https://www.leupold.com'],gm:['Garmin','https://www.garmin.com'],fl:['First Lite','https://www.firstlite.com'],st:['Sitka Gear','https://www.sitkagear.com'],cg:['Caribou Gear','https://caribougear.com'],on:['onX','https://www.onxmaps.com'],mr:['Mystery Ranch','https://www.mysteryranch.com']};
 var REC={
 Legal:[['Your state wildlife agency','Buy licenses and tags and read current season dates on the official agency site. Rules differ by state and unit.','']],
-Safety:[['Petzl Actik Core headlamp','Rechargeable, with a red light mode that protects your night vision.','rei,am'],['Garmin inReach Mini 2','Two-way satellite messaging and SOS where there is no cell signal.','gm,rei,am','Backcountry|Overnight'],['Adventure Medical Kits first-aid kits','Pre-built kits in day and multi-day sizes.','rei,am,sw'],['Counter Assault bear spray','Carry it on your belt or pack strap, not inside the pack.','sw,bp,am','Mountains']],
+Safety:[['Howard Leight or Peltor electronic hearing protection','Lets you hear calls and quiet voices, then cuts off loud shots.','mw,sw,am','Shotgun|Rifle'],['Pyramex or Wiley X shooting glasses','Impact-rated lenses protect your eyes from stray shot.','mw,sw,am','Shotgun'],['Petzl Actik Core headlamp','Rechargeable, with a red light mode that protects your night vision.','rei,am'],['Garmin inReach Mini 2','Two-way satellite messaging and SOS where there is no cell signal.','gm,rei,am','Backcountry|Overnight'],['Adventure Medical Kits first-aid kits','Pre-built kits in day and multi-day sizes.','rei,am,sw'],['Counter Assault bear spray','Carry it on your belt or pack strap, not inside the pack.','sw,bp,am','Mountains']],
 Navigation:[['onX Hunt app','Property lines, public land and offline maps for your unit.','on'],['Black Diamond trekking poles','Collapsible poles for steep ground and heavy loads.','rei,bc,am','Mountains']],
-Field:[['Havalon replaceable-blade knife','Light skinning knife for big game.','sw,am','Elk|Mule deer|Whitetail'],['Caribou Gear game bags','Breathable bags for packing meat out.','cg,sw','Elk|Mule deer|Whitetail'],['Primos hunting calls','Box, diaphragm and bugle-style calls for elk, turkey and ducks.','bp,sw','Elk|Turkey|Waterfowl'],['Avian-X decoys','Realistic spreads for ducks, geese and turkey.','bp,sw','Waterfowl|Turkey'],['Lone Wolf climbing tree stand','Light, quiet stands for whitetail. Use a full-body harness every time.','bp,sw,am','Whitetail']],
+Field:[['Havalon replaceable-blade knife','Light skinning knife for big game.','sw,am','Elk|Mule deer|Whitetail'],['Caribou Gear game bags','Breathable bags for packing meat out.','cg,sw','Elk|Mule deer|Whitetail'],['Primos hunting calls','Box, diaphragm and bugle-style calls for elk, turkey and ducks.','bp,sw','Elk|Turkey|Waterfowl'],['Avian-X decoys','Realistic spreads for ducks, geese and turkey.','bp,sw','Waterfowl|Turkey'],['Greenhead Gear (GHG) duck and goose decoys','Popular full-body and floating decoys for building a spread.','bp,sw,am','Waterfowl'],['Mojo Outdoors spinning-wing decoy','Motion that pulls in ducks on calm, bright days.','bp,sw,am','Waterfowl'],['Tanglefree decoy bags','Carry and store a full spread without tangling the lines.','bp,sw,am','Waterfowl'],['Final Approach layout blinds','Low-profile blinds for field hunts for ducks and geese.','bp,sw','Waterfowl'],['Lone Wolf climbing tree stand','Light, quiet stands for whitetail. Use a full-body harness every time.','bp,sw,am','Whitetail']],
 Optics:[['Vortex Diamondback HD 10x42 binoculars','A popular value pick for glassing.','vx,sw,am'],['Leupold rangefinder','Compact, with angle compensation for steep ground.','lp,sw,am']],
-Weapon:[['Hornady Precision Hunter ammunition','Factory loads for common big-game calibers. Match your rifle caliber.','mw,sw','Rifle'],['Hodgdon Triple Seven pellets','Common muzzleloader propellant. Follow your rifle maker load data.','mw,sw','Muzzleloader'],['Easton arrows with broadheads','Match spine to your draw weight and tune before the season.','bp,sw,am','Bow'],['Wrist or handheld release aid','Try a few at an archery shop for fit.','bp,sw','Bow']],
-Clothing:[['First Lite merino base layers','Warm when damp and low on odor.','fl,sw'],['Sitka Gear shells and insulation','Premium rain, wind and cold-weather layers.','st,sw','Rain|Snow|Cold|Wind'],['Marmot PreCip rain shell','A lower-cost shell that packs small.','rei,bc,am','Rain|Snow'],['Banded waders','Insulated and neoprene options for marsh and river.','bp,sw','Waterfowl']],
+Weapon:[['Federal Black Cloud steel waterfowl loads','Non-toxic steel loads, which are required for waterfowl. Check your gun and choke are rated for steel.','mw,sw,bp','Waterfowl'],['Patternmaster or Carlson\u2019s choke tubes','Steel-rated choke tubes. Pattern your load on paper before the season.','mw,sw,am','Shotgun'],['Mossberg 500 or Remington 870 pump shotguns','Proven, affordable 12-gauge pumps. Pick 3-inch chambers for waterfowl.','sw,bp','Shotgun'],['Federal Premium turkey loads','Dense shot for turkey. Pair with an extra-full choke.','mw,sw,bp','Turkey'],['Hornady Precision Hunter ammunition','Factory loads for common big-game calibers. Match your rifle caliber.','mw,sw','Rifle'],['Hodgdon Triple Seven pellets','Common muzzleloader propellant. Follow your rifle maker load data.','mw,sw','Muzzleloader'],['Easton arrows with broadheads','Match spine to your draw weight and tune before the season.','bp,sw,am','Bow'],['Wrist or handheld release aid','Try a few at an archery shop for fit.','bp,sw','Bow']],
+Clothing:[['Banded or Sitka waders','Insulated, tough waders for cold water and sharp reeds.','bp,sw,am','Waterfowl'],['First Lite fleece layers for under waders','Warm layers that stay dry when you sweat in waders.','fl,sw,am','Waterfowl'],['First Lite merino base layers','Warm when damp and low on odor.','fl,sw'],['Sitka Gear shells and insulation','Premium rain, wind and cold-weather layers.','st,sw','Rain|Snow|Cold|Wind'],['Marmot PreCip rain shell','A lower-cost shell that packs small.','rei,bc,am','Rain|Snow'],['Banded waders','Insulated and neoprene options for marsh and river.','bp,sw','Waterfowl']],
 Camp:[['Mystery Ranch hunting packs','Frame packs built to haul meat as well as gear.','mr,sw,bc','Backcountry|Overnight|Base camp'],['Big Agnes Copper Spur tent','Light freestanding shelter for two or more.','rei,bc,am','Backcountry|Overnight|Base camp'],['Therm-a-Rest NeoAir sleeping pad','Light, warm and packable.','rei,bc,am','Backcountry|Overnight|Base camp'],['MSR PocketRocket stove','Small canister stove for boiling water fast.','rei,am','Backcountry|Overnight|Base camp']],
 Water:[['Sawyer Squeeze water filter','Light filter that works with standard bottles and bladders.','rei,am','Backcountry|Overnight'],['Nalgene wide-mouth bottles','Tough, easy to fill from streams.','rei,am']],
 Food:[['Mountain House freeze-dried meals','Add hot water, eat from the pouch.','rei,sw,am'],['Peak Refuel meals','High-calorie freeze-dried dinners.','rei,am']]};
