@@ -12,5 +12,5 @@ exports.handler = async (e) => {
     if (s.status !== 'complete' || !s.customer || !isLive(s.subscription)) return reply({ premium: false }, 402);
     await saveSub({ user_id: user.id, stripe_customer_id: s.customer, stripe_subscription_id: s.subscription.id, updated_at: new Date().toISOString() });
     return reply({ premium: true });
-  } catch (err) { return reply({ error: 'Could not verify payment' }, 500); }
+  } catch (err) { console.error('activate failed', err && err.message); return reply({ error: 'Could not verify payment', detail: String(err && err.message).slice(0, 120) }, 500); }
 };
