@@ -2,6 +2,8 @@
 const { stripe, getUser, getSub, reply, isLive } = require('../lib/helpers');
 const j = async (u) => { const r = await fetch(u); if (!r.ok) throw new Error('upstream'); return r.json(); };
 exports.handler = async (e) => {
+  // Live forecast is switched off until a commercial weather plan is in place.
+  if (process.env.FORECAST_ENABLED !== 'true') return reply({ error: 'Live forecast is coming soon.' }, 503);
   try {
     const user = await getUser(e);
     if (!user) return reply({ error: 'Sign in first' }, 401);

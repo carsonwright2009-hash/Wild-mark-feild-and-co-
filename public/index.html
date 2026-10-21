@@ -96,7 +96,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <div><label for="when">Hunt start date</label><input type="date" id="when"></div>
 <div><label for="ter">Terrain</label><select id="ter"><option>Mountains</option><option>Forest</option><option>Desert</option><option>Prairie</option><option>Wetlands</option></select></div>
 <div class="full"><span class="lbl">Weather (pick all that apply)</span><div class="chips" id="wx"></div></div>
-<div class="full"><button type="button" class="btn alt" id="wxBtn">Get live forecast (Premium)</button></div>
+<div class="full" hidden><button type="button" class="btn alt" id="wxBtn">Get live forecast (Premium)</button></div>
 <div><label for="days">Trip length</label><select id="days"><option value="1">1 day</option><option value="2">2 days</option><option value="4" selected>3 to 5 days</option><option value="8">6 to 10+ days</option></select></div>
 <div><label for="wt">Pack weight</label><select id="wt"><option>Ultralight</option><option selected>Balanced</option><option>Comfort</option></select></div>
 <div><label for="bud">Budget</label><select id="bud"><option>Budget</option><option selected>Mid-range</option><option>Premium</option></select></div>
@@ -145,7 +145,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 
 <section id="pricing"><h2>Wildmark Premium</h2><div class="grid">
 <div class="card"><h3>Free</h3><p class="hint">$0</p><p style="margin:8px 0 0">Gear builder and category picks<br>Gear library and printing<br>Up to 2 saved kits<br>Hunt journal and check-in plan</p></div>
-<div class="card" style="border:2px solid var(--green)"><h3>Premium</h3><p style="margin:6px 0"><b id="price">$10.99</b> per month</p><p style="margin:8px 0 0">Unlimited saved kits, synced across devices<br>Live weather forecast<br>Group hunts and food planner<br>PDF trip packets</p><button class="btn" id="goPro">Go Premium</button><p class="hint" id="proMsg"></p></div></div></section>
+<div class="card" style="border:2px solid var(--green)"><h3>Premium</h3><p style="margin:6px 0"><b id="price">$10.99</b> per month</p><p style="margin:8px 0 0">Unlimited saved kits, synced across devices<br>Group hunts and food planner<br>PDF trip packets</p><button class="btn" id="goPro">Go Premium</button><p class="hint" id="proMsg"></p></div></div></section>
 <section><h2>Hunt journal</h2><div class="card"><label for="jn">What worked and what you left unused</label><textarea id="jn" rows="3"></textarea><button class="btn" id="jadd">Add entry</button><div id="jl"></div></div></section>
 <section><h2>About Wildmark Field Co.</h2><div class="card"><p style="margin:0">Wildmark builds gear lists for hunters who want to carry what they need and nothing they do not. Tell us the hunt and we size the kit to the game, the weather and your pack. Hunt prepared.</p></div></section>
 <section><h2>Gear library</h2><input type="text" id="lq" placeholder="Search gear" oninput="lib()"><div class="card" style="overflow-x:auto;margin-top:10px" id="lib"></div></section>
