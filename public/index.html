@@ -311,7 +311,7 @@ function rows(){var r=I.map(function(it){var g=GEAR[slug(it[0])]||{};return{id:s
 function items(){return rows().filter(function(r){return!r.hide}).map(function(r){return[r.n,r.cat,r.oz,r.pr,r.pri,r.fn,r.u,r.star]})}
 function lib(){var q=$('lq').value.toLowerCase();$('lib').innerHTML='<table><tr><th>Item</th><th>Category</th><th>Weight</th><th>Price</th></tr>'+rows().filter(function(r){return!r.hide&&(r.n+r.cat).toLowerCase().indexOf(q)>-1}).map(function(r){return'<tr><td>'+esc(r.n)+(r.star?' ★':'')+'</td><td>'+esc(r.cat)+'</td><td>'+r.oz+' oz</td><td>$'+r.pr+'</td></tr>'}).join('')+'</table>'}
 function track(){if(!DB||!UID)return;myB++;DB.doc('stats/'+UID).set({builds:myB}).catch(function(){})}
-var PREMIUM_LINK='https://buy.stripe.com/test_7sYfZggAA46Z7WQgzK8og00',FREE_KITS=2,PRO=false;
+var PREMIUM_LINK='https://buy.stripe.com/28EcN45O74uzgpO6lI2kw01',FREE_KITS=2,PRO=false;
 var OWN={},SW={'Frame pack':['ultralight frame pack',20],'Tent or shelter':['single-wall shelter',24],'Sleeping bag':['down quilt',10],'Sleeping pad':['short torso pad',5],'Stove and fuel':['canister stove with a small pot',4],'Insulated jacket':['hooded down puffy',5],'Binoculars':['compact 8x32 binoculars',10],'Tree stand and harness':['hang-on stand with sticks',80],'Pop-up blind':['brush-style blind',50],'Waders':['breathable waders',20],'Daypack':['frameless 25 L pack',10],'Water bottle (1 L)':['collapsible bottle',2]};
 try{OWN=JSON.parse(localStorage.getItem('wildmark_own')||'{}')}catch(e){}
 function swap(i){var s=SW[i.n];return s?' · Lighter option: '+s[0]+' (saves about '+s[1]*i.q+' oz)':''}
