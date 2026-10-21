@@ -12,5 +12,10 @@ exports.handler = async (e) => {
     if (s.status !== 'complete' || !s.customer || !isLive(s.subscription)) return reply({ premium: false }, 402);
     await saveSub({ user_id: user.id, stripe_customer_id: s.customer, stripe_subscription_id: s.subscription.id, updated_at: new Date().toISOString() });
     return reply({ premium: true });
-  } catch (err) { console.error('activate failed', err && err.message); return reply({ error: 'Could not verify payment', detail: String(err && err.message).slice(0, 120) }, 500); }
+  } catch (err) {
+    console.error('activate failed', err && err.message);
+    let who = '';
+    try { const k = process.env.STRIPE_SECRET_KEY || ''; const a = await stripe('/account'); who = ' key ' + k.slice(0, 8) + ' acct ' + a.id; } catch (e2) { who = ' account lookup failed: ' + String(e2 && e2.message).slice(0, 60); }
+    return reply({ error: 'Could not verify payment', detail: String(err && err.message).slice(0, 120) + who }, 500);
+  }
 };
