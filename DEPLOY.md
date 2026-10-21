@@ -13,11 +13,11 @@
 - SUPABASE_URL: your Supabase project URL from Project Settings > API.
 - SUPABASE_ANON_KEY: your public publishable / anon key from Supabase Project Settings > API.
 - SUPABASE_SERVICE_ROLE_KEY: Supabase > Project Settings > API Keys, the secret / service_role key. Server only, never paste it in chat or into public/index.html.
-- SITE_URL: https://warm-pithivier-0cfb30.netlify.app/
+- SITE_URL: https://wildmarkfieldco.com/
 Then Deploys > Trigger deploy.
 
 ## 3b. Set up sign-in in Supabase
-- Authentication > URL Configuration: set Site URL to https://warm-pithivier-0cfb30.netlify.app/ and add the same address under Redirect URLs.
+- Authentication > URL Configuration: set Site URL to https://wildmarkfieldco.com/ and add the same address under Redirect URLs.
 - Supabase's built-in email sender is limited to a few emails per hour. Before launch, add your own SMTP provider under Authentication > Emails > SMTP Settings.
 
 ## 4. Turn on in Stripe (test mode)
