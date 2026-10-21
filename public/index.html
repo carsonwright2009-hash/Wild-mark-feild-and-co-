@@ -77,7 +77,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 .hero{padding-bottom:160px}.hero svg.scene{position:absolute;left:0;right:auto;top:auto;bottom:0;width:100%;height:150px;opacity:1}
 .gcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .gc{font:inherit;font-size:14px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--green);cursor:pointer}
-.gc svg{width:100%;max-width:96px;height:auto;aspect-ratio:120/98}.gc span{color:var(--ink)}
+.gc svg{width:100%;max-width:96px;height:auto;aspect-ratio:120/108}.gc span{color:var(--ink)}
 .gc[aria-pressed=true]{background:var(--green);color:var(--onGreen);border-color:var(--green)}.gc[aria-pressed=true] span{color:var(--onGreen)}
 :root[data-theme="dark"] .gc{color:var(--hi)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gc{color:var(--hi)}}
 #packet{display:none}
@@ -87,70 +87,42 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-<symbol id="g-elk" viewBox="0 -8 120 98"><g fill="currentColor" stroke="none">
-<ellipse cx="52" cy="56" rx="27" ry="13"/>
-<path d="M72 50 L88 28 L99 34 L84 60 Z"/>
-<path d="M90 28 L110 36 Q113 40 108 42 L96 40 Z"/>
-<path d="M92 27 L88 18 L96 24 Z"/>
-<path d="M33 62h4l-1 24h-3zM41 64h4l0 22h-3zM66 64h4l1 22h-3zM74 62h4l-2 24h-3z"/>
-<path d="M26 52 Q22 50 24 46 L30 50Z"/></g>
-<g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-<path d="M92 26 C86 14 72 8 58 12"/><path d="M84 17 L86 5"/><path d="M76 12 L76 1"/><path d="M68 10 L65 0"/><path d="M60 12 L55 5"/>
-<path d="M94 25 C97 16 92 8 84 5"/></g></symbol>
-
-<symbol id="g-mule" viewBox="0 -8 120 98"><g fill="currentColor">
-<ellipse cx="52" cy="58" rx="25" ry="12"/>
-<path d="M71 53 L86 34 L96 40 L82 62 Z"/>
-<path d="M88 34 L106 42 Q109 46 104 47 L94 45 Z"/>
-<path d="M88 33 L74 24 L80 38Z"/><path d="M92 32 L102 22 L98 36Z"/>
-<path d="M33 64h4l-1 22h-3zM41 66h4l0 20h-3zM64 66h4l1 20h-3zM72 64h4l-2 22h-3z"/>
-<path d="M27 54 Q24 56 26 62 L30 58Z"/></g>
-<g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-<path d="M96 33 C98 24 94 14 88 8"/><path d="M93 20 L84 14"/><path d="M96 28 L104 20"/><path d="M89 10 L84 4"/><path d="M89 10 L95 3"/>
-<path d="M99 30 C106 24 108 14 104 8"/><path d="M104 8 L99 3"/><path d="M105 14 L111 10"/></g></symbol>
-
-<symbol id="g-white" viewBox="0 -8 120 98"><g fill="currentColor">
-<ellipse cx="50" cy="58" rx="25" ry="12"/>
-<path d="M69 53 L84 34 L94 40 L80 62 Z"/>
-<path d="M86 34 L104 42 Q107 46 102 47 L92 45 Z"/>
-<path d="M86 33 L78 26 L82 38Z"/>
-<path d="M31 64h4l-1 22h-3zM39 66h4l0 20h-3zM62 66h4l1 20h-3zM70 64h4l-2 22h-3z"/>
-<path d="M26 52 L14 40 Q12 38 16 40 L30 50Z"/></g>
-<g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-<path d="M92 33 C90 24 88 14 84 8 C82 6 80 6 78 8"/><path d="M90 24 L82 22"/><path d="M89 17 L82 15"/><path d="M85 10 L88 3"/>
-<path d="M95 32 C98 22 100 14 102 8"/><path d="M98 22 L106 20"/><path d="M100 14 L107 12"/></g></symbol>
-
-<symbol id="g-turkey" viewBox="0 -8 120 98"><g fill="currentColor">
-<path d="M58 58 L14 52 Q8 38 16 24 Q18 14 28 10 Q38 2 50 8 Q60 6 68 14 Q78 20 76 32 Q82 40 74 54 Z" opacity=".55"/>
-<path d="M20 46 L52 52 M24 34 L52 50 M32 20 L54 46 M46 12 L56 44 M62 14 L60 44 M72 24 L62 46" stroke="currentColor" stroke-width="1.6" fill="none" opacity=".9"/>
-<ellipse cx="66" cy="56" rx="22" ry="15"/>
-<path d="M82 48 Q86 36 90 28 L96 30 Q95 42 92 54Z"/>
-<circle cx="93" cy="26" r="6"/>
-<path d="M98 26 L108 29 L98 31Z"/>
-<path d="M92 32 Q96 40 94 44 Q90 40 90 32Z" opacity=".7"/>
-<path d="M60 70 L58 86 M56 86 L64 86 M72 70 L72 86 M70 86 L78 86" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/></g></symbol>
-
-<symbol id="g-duck" viewBox="0 -8 120 98"><g fill="currentColor">
-<path d="M10 62 Q8 48 24 50 Q30 40 46 46 Q74 42 86 54 Q94 56 98 52 Q100 40 94 36 Q94 26 104 26 Q112 26 112 34 L120 38 L112 41 Q112 48 108 54 Q104 62 94 64 Q84 78 52 78 Q20 78 10 62Z"/>
-<path d="M2 66 Q8 62 14 64 L12 70Z"/></g>
-<path d="M0 82 Q15 78 30 82 T60 82 T90 82 T120 82" fill="none" stroke="currentColor" stroke-width="2" opacity=".6"/>
-<circle cx="103" cy="31" r="1.8" fill="#f3f1ea"/></symbol>
-
-<symbol id="g-rabbit" viewBox="0 -8 120 98"><g fill="currentColor">
-<ellipse cx="54" cy="62" rx="26" ry="18"/>
-<ellipse cx="82" cy="46" rx="13" ry="11"/>
-<path d="M80 40 Q74 14 82 10 Q90 12 88 40Z"/><path d="M86 40 Q90 18 98 18 Q102 24 94 42Z"/>
-<path d="M92 48 Q104 50 104 54 Q98 58 90 54Z"/>
-<circle cx="28" cy="62" r="7"/>
-<path d="M68 76 L88 80 Q90 84 82 84 L64 82Z"/><path d="M36 78 L56 82 Q54 86 46 86 L32 84Z"/></g>
-<circle cx="86" cy="45" r="1.8" fill="#f3f1ea"/></symbol>
+<symbol id="g-elk" viewBox="0 -8 120 108">
+<path fill="currentColor" fill-rule="evenodd" d="M19 47C20 40 30 38 44 39C58 40 68 41 74 40C78 34 83 27 87 22L90 20C93 21 100 27 106 34C110 37 113 39 111 42C109 44 104 43 99 42C95 47 91 52 87 56C86 62 84 65 82 66C70 70 48 69 32 64C22 62 18 54 19 47ZM98 30a1.6 1.6 0 1 0 0.1 0Z"/>
+<path fill="currentColor" d="M73 60L79 61L77.5 76L79.5 90L78.5 100L74 100L75 90L72.5 76ZM63 62L69 62L68 76L70 90L69 100L65 100L65.5 90L62.5 76ZM27 56L37 60L35.5 74L38.5 88L38 100L33.5 100L33.5 88L30 74Q24 68 27 56ZM38 60L46 62L44.5 76L46.5 90L46 100L42 100L42 88L40 76Z"/>
+<path fill="currentColor" d="M19 47L13 51L19 53ZM89 20L82 13L93 18Z"/>
+<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path stroke-width="3.2" d="M91 19C88 9 76 3 62 7"/><path stroke-width="2.4" d="M86 10L87 -2M79 6L78 -5M71 5L68 -4M64 6L59 -1M96 21C99 12 96 4 88 0"/></g></symbol>
+<symbol id="g-mule" viewBox="0 -8 120 108">
+<path fill="currentColor" fill-rule="evenodd" d="M21 50C22 43 31 41 44 42C57 43 65 43 71 43C75 38 80 33 84 29L88 28C92 29 98 34 103 40C106 43 108 45 106 47C104 48 100 47 96 46C93 50 89 54 86 57C85 62 83 64 81 65C70 69 50 68 35 64C25 62 20 56 21 50ZM96 37a1.4 1.4 0 1 0 0.1 0Z"/>
+<path fill="currentColor" d="M73 60L79 61L77.5 76L79.5 90L78.5 100L74 100L75 90L72.5 76ZM63 62L69 62L68 76L70 90L69 100L65 100L65.5 90L62.5 76ZM27 56L37 60L35.5 74L38.5 88L38 100L33.5 100L33.5 88L30 74Q24 68 27 56ZM38 60L46 62L44.5 76L46.5 90L46 100L42 100L42 88L40 76Z"/>
+<path fill="currentColor" d="M21 49L17 56L22 56ZM86 28L70 20Q68 26 80 33ZM90 28L102 18Q104 26 94 33Z"/>
+<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path stroke-width="3" d="M92 28C94 20 90 12 84 6"/><path stroke-width="2.3" d="M91 21L82 17M86 11L79 7M86 11L90 3M94 29C100 24 104 16 102 8M102 8L97 2M102 8L108 4M99 18L107 15"/></g></symbol>
+<symbol id="g-white" viewBox="0 -8 120 108">
+<path fill="currentColor" fill-rule="evenodd" d="M22 49C23 42 31 40 44 41C57 42 64 42 70 42C74 37 79 32 83 28L87 27C91 28 97 33 102 39C105 42 107 44 105 46C103 47 99 46 95 45C92 49 88 53 85 56C84 61 82 63 80 64C69 68 49 67 35 63C26 61 21 55 22 49ZM95 36a1.4 1.4 0 1 0 0.1 0Z"/>
+<path fill="currentColor" d="M73 60L79 61L77.5 76L79.5 90L78.5 100L74 100L75 90L72.5 76ZM63 62L69 62L68 76L70 90L69 100L65 100L65.5 90L62.5 76ZM27 56L37 60L35.5 74L38.5 88L38 100L33.5 100L33.5 88L30 74Q24 68 27 56ZM38 60L46 62L44.5 76L46.5 90L46 100L42 100L42 88L40 76Z"/>
+<path fill="currentColor" d="M22 47C14 36 12 30 14 28C18 30 25 38 27 45ZM85 27L77 19L88 24Z"/>
+<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path stroke-width="3" d="M90 26C93 18 93 8 88 0C86 -3 83 -3 81 -1"/><path stroke-width="2.2" d="M92 19L99 15M92 11L99 6M89 3L92 -5M94 27C98 20 102 13 102 5C102 3 104 2 106 3"/></g></symbol>
+<symbol id="g-turkey" viewBox="0 -8 120 108"><g transform="translate(0,10)">
+<path fill="currentColor" opacity=".5" d="M56 56C42 56 28 52 20 46L12 40L16 32L10 24L16 18L14 10L22 8L26 0L34 2L40 -3L48 1L56 -2L63 3L70 2L74 9L80 12L78 20L83 26L80 34L84 41C78 50 68 56 56 56Z"/>
+<g stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"><path d="M54 50L16 40M54 49L18 26M54 48L26 10M55 47L40 3M57 46L56 -1M59 46L72 4M60 47L80 14M62 49L82 30"/></g>
+<path fill="currentColor" fill-rule="evenodd" d="M56 56C58 46 70 42 82 44C88 44 90 38 91 32C92 28 91 24 93 21C95 18 99 18 100 22C101 24 100 27 99 29L108 30L99 33C100 38 99 42 96 46C98 54 92 66 78 68C66 70 54 66 56 56ZM96 22a1.3 1.3 0 1 0 0.1 0Z"/>
+<path fill="currentColor" d="M96 33Q101 38 98 44Q94 40 94 34ZM90 52C84 52 80 56 80 62L88 60ZM60 58L50 66L58 64Z"/>
+<g stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M70 68L69 84M69 84L61 86M69 84L72 87M69 84L77 86M80 66L81 83M81 83L74 86M81 83L84 87M81 83L89 85"/></g></g></symbol>
+<symbol id="g-duck" viewBox="0 -8 120 108"><g transform="translate(0,10)">
+<path fill="currentColor" fill-rule="evenodd" d="M4 44L18 44C26 40 36 42 44 48C60 50 76 48 84 44C88 42 88 38 86 34C82 28 84 18 92 15C100 12 108 16 108 24L116 28L108 31C108 38 104 44 98 50C92 62 78 68 56 68C34 68 16 62 10 52C8 49 6 47 4 44ZM96 22a1.8 1.8 0 1 0 0.1 0Z"/>
+<path fill="none" stroke="#f3f1ea" stroke-width="2" stroke-linecap="round" opacity=".7" d="M30 56C46 50 64 52 76 56"/>
+<path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55" d="M0 78C10 74 20 74 30 78C40 82 50 82 60 78C70 74 80 74 90 78C100 82 110 82 120 78M12 86C26 84 38 84 50 86M70 86C84 84 96 84 108 86"/></g></symbol>
+<symbol id="g-rabbit" viewBox="0 -8 120 108"><g transform="translate(0,10)">
+<path fill="currentColor" fill-rule="evenodd" d="M16 66C14 54 24 44 40 42C52 40 62 42 70 44C74 38 78 36 82 36C80 28 78 14 82 6C86 -2 92 0 92 10C92 18 91 26 90 34C94 30 98 18 106 14C110 12 112 16 110 22C108 30 102 38 96 42C100 44 108 48 110 52C110 56 104 58 98 56C96 60 94 62 92 66C94 70 88 74 80 72L56 74L28 76C20 76 16 72 16 66ZM90 46a1.8 1.8 0 1 0 0.1 0Z"/>
+<path fill="currentColor" d="M70 66L96 74Q99 80 92 80L66 78ZM34 72L58 78Q58 84 50 84L30 82Z"/>
+<circle cx="14" cy="60" r="8" fill="currentColor" opacity=".55"/></g></symbol>
 </defs></svg>
 <header class="hero">
 <svg class="scene" viewBox="0 0 720 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
 <circle cx="300" cy="84" r="28" fill="#c9a45c" opacity=".38"/>
 <path d="M0 100 L70 62 L120 88 L190 40 L260 92 L330 58 L400 96 L470 50 L540 90 L620 56 L720 96 L720 150 L0 150Z" fill="#2f5442"/>
 <path d="M0 118 L60 92 L130 112 L210 80 L290 114 L360 96 L440 118 L520 90 L600 114 L680 94 L720 108 L720 150 L0 150Z" fill="#27483a"/>
-<g style="color:#183026"><use href="#g-elk" x="430" y="56" width="84" height="62"/></g>
+<g style="color:#183026"><use href="#g-elk" x="430" y="42" width="84" height="76"/></g>
 <path d="M0 134 Q120 118 240 132 T480 130 T720 128 L720 150 L0 150Z" fill="#183026"/>
 <g fill="#183026"><path d="M30 134 l9 -34 l9 34z M46 136 l7 -26 l7 26z M92 132 l8 -30 l8 30z M214 133 l8 -30 l8 30z M350 133 l7 -26 l7 26z M520 131 l9 -34 l9 34z M540 133 l7 -26 l7 26z M640 130 l9 -36 l9 36z M660 132 l7 -26 l7 26z M690 130 l8 -30 l8 30z M300 134 l7 -24 l7 24z M318 135 l9 -32 l9 32z"/></g>
 </svg>
@@ -240,7 +212,7 @@ var $=function(i){return document.getElementById(i)};
 var WX=['Hot','Mild','Cold','Rain','Snow','Wind'],wx={Mild:1},chk={},cur=null,KEY='wildmark_kits';
 var GIC={'Elk':'g-elk','Mule deer':'g-mule','Whitetail':'g-white','Turkey':'g-turkey','Waterfowl':'g-duck','Small game':'g-rabbit'};
 function syncG(){[].forEach.call($('gcards').children,function(b){b.setAttribute('aria-pressed',b.dataset.g==$('game').value)})}
-[].forEach.call($('game').options,function(o){var b=document.createElement('button');b.type='button';b.className='gc';b.dataset.g=o.value;b.innerHTML='<svg viewBox="0 -8 120 98" aria-hidden="true"><use href="#'+GIC[o.value]+'"/></svg><span>'+esc(o.value)+'</span>';b.onclick=function(){$('game').value=o.value;syncG()};$('gcards').appendChild(b)});
+[].forEach.call($('game').options,function(o){var b=document.createElement('button');b.type='button';b.className='gc';b.dataset.g=o.value;b.innerHTML='<svg viewBox="0 -8 120 108" aria-hidden="true"><use href="#'+GIC[o.value]+'"/></svg><span>'+esc(o.value)+'</span>';b.onclick=function(){$('game').value=o.value;syncG()};$('gcards').appendChild(b)});
 syncG();
 var big=function(c){return c.game=='Elk'||c.game=='Mule deer'||c.game=='Whitetail'};
 var not=function(c){return c.trip!='Day hunt'};
