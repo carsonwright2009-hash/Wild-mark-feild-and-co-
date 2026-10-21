@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a2e">
 <title>Wildmark Field Co. Gear Builder</title>
+<meta name="description" content="Build a hunting gear list sized to your game, weapon, terrain, weather and pack. Hunt prepared.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Wildmark Field Co."><meta property="og:title" content="Wildmark Field Co. - Hunt prepared."><meta property="og:description" content="Build a hunting gear list sized to your game, weapon, terrain, weather and pack."><meta property="og:url" content="https://wildmarkfieldco.com/"><meta property="og:image" content="https://wildmarkfieldco.com/og.png"><meta name="twitter:card" content="summary_large_image">
 <!-- Standalone build: no server needed. Upload this single file to any static host. -->
 <style>
 :root{--bg:#f3f1ea;--surface:#fbfaf6;--ink:#242826;--mute:#666d66;--green:#1f3a2e;--onGreen:#f3f1ea;--line:#d8d4c6;--ochre:#9a7634;--hi:#1f3a2e;--md:#9a7634;--lo:#8a8f88;
@@ -80,6 +82,11 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 .gc svg{width:100%;max-width:96px;height:auto;aspect-ratio:120/108}.gc span{color:var(--ink)}
 .gc[aria-pressed=true]{--gcut:var(--green);background:var(--green);color:var(--onGreen);border-color:var(--green)}.gc[aria-pressed=true] span{color:var(--onGreen)}
 :root[data-theme="dark"] .gc{color:var(--hi)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gc{color:var(--hi)}}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}@media (max-width:520px){.how{grid-template-columns:1fr}}
+.how>div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;gap:12px;align-items:flex-start}.how svg{flex:none;width:30px;height:30px;color:var(--green)}.how b{display:block;font-size:15px}.how span{display:block;font-size:13px;color:var(--mute);line-height:1.4}
+:root[data-theme="dark"] .how svg{color:var(--hi)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .how svg{color:var(--hi)}}
+.gcards.sm{grid-template-columns:repeat(4,1fr);gap:6px}#tcards{grid-template-columns:repeat(5,1fr)}.gc.sm{font-size:10px;letter-spacing:-.02em;padding:6px 0 8px;min-width:0}.gc.sm span{white-space:nowrap}.gc.sm svg{max-width:52px;aspect-ratio:60/40}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.lc{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:14px;min-width:0}.lc b{font-size:15px;line-height:1.3}.lt{font-size:11px;color:var(--ochre);text-transform:uppercase;letter-spacing:.06em;font-weight:600}.lc span:last-child{color:var(--mute)}
 #packet{display:none}
 @media print{body.pk>*:not(#packet){display:none!important}body.pk #packet{display:block;padding:16px;color:#000;background:#fff;font:14px/1.5 system-ui,sans-serif}#packet h1{font-size:24px;margin:0}#packet h2{margin:14px 0 4px;font-size:16px}#packet p{margin:2px 0}}
 @media print{.hero,#builder,.actions,#savedWrap,.fine{display:none}body{background:#fff;color:#000}}
@@ -113,6 +120,15 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <path fill="currentColor" fill-rule="evenodd" d="M16 66C14 54 24 44 40 42C52 40 62 42 70 44C74 38 78 36 82 36C80 28 78 14 82 6C86 -2 92 0 92 10C92 18 91 26 90 34C94 30 98 18 106 14C110 12 112 16 110 22C108 30 102 38 96 42C100 44 108 48 110 52C110 56 104 58 98 56C96 60 94 62 92 66C94 70 88 74 80 72L56 74L28 76C20 76 16 72 16 66ZM90 46a1.8 1.8 0 1 0 0.1 0Z"/>
 <path fill="currentColor" d="M70 66L96 74Q99 80 92 80L66 78ZM34 72L58 78Q58 84 50 84L30 82Z"/>
 <circle cx="14" cy="60" r="8" fill="currentColor" opacity=".55"/></g></symbol>
+<symbol id="w-rifle" viewBox="0 0 60 40"><g fill="currentColor"><path d="M3 17L20 15.5V21L10 31H5L3 25Z"/><rect x="19" y="15" width="38" height="4.2" rx="1.6"/><rect x="26" y="9.5" width="20" height="3.6" rx="1.8"/><rect x="30" y="12.4" width="2.2" height="3"/><rect x="40" y="12.4" width="2.2" height="3"/><path d="M24 21h9l-1 4h-3l-1-2h-4z"/></g></symbol>
+<symbol id="w-shotgun" viewBox="0 0 60 40"><g fill="currentColor"><path d="M2 18L20 16V22L10 32H4L2 26Z"/><rect x="19" y="15.6" width="39" height="3.4" rx="1.4"/><rect x="19" y="19.4" width="30" height="2" rx="1"/><rect x="33" y="19.6" width="14" height="5" rx="2.5"/><rect x="56" y="14.4" width="2.8" height="1.6"/></g></symbol>
+<symbol id="w-bow" viewBox="0 0 60 40"><g fill="none" stroke="currentColor" stroke-linecap="round"><path stroke-width="3.4" d="M22 4C42 11 42 29 22 36"/><path stroke-width="1.2" d="M22 4L22 36"/><path stroke-width="1.8" d="M8 20L50 20"/><path stroke-width="1.4" d="M8 20l-5-3M8 20l-5 3M12 20l-5-3M12 20l-5 3"/></g><path fill="currentColor" d="M56 20L48 16.2V23.8Z"/></symbol>
+<symbol id="w-muzz" viewBox="0 0 60 40"><g fill="currentColor"><path d="M2 21C4 18 8 17 20 18L20 23L11 31C8 34 4 33 3 30Z"/><rect x="19" y="17.5" width="38" height="4" rx="1.4"/><rect x="25" y="23" width="30" height="1.6" rx=".8"/><path d="M16 15C18 12 22 12 22 15L21 18H17Z"/><rect x="55" y="16.2" width="3" height="1.6"/></g></symbol>
+<symbol id="t-mtn" viewBox="0 0 60 40"><path fill="currentColor" d="M2 36L20 8L31 26L38 16L58 36Z"/></symbol>
+<symbol id="t-forest" viewBox="0 0 60 40"><g fill="currentColor"><path d="M14 5L23 20H18L26 31H2L10 20H5Z"/><rect x="12" y="31" width="4" height="5"/><path d="M42 10L50 23H46L54 33H30L38 23H34Z"/><rect x="40" y="33" width="4" height="4"/></g></symbol>
+<symbol id="t-desert" viewBox="0 0 60 40"><g fill="currentColor"><rect x="26" y="7" width="8" height="29" rx="4"/><path d="M26 25H21a4 4 0 0 1 -4 -4V16a2.5 2.5 0 0 1 5 0V20a1 1 0 0 0 1 1H26Z"/><path d="M34 21H39a1 1 0 0 0 1 -1V14a2.5 2.5 0 0 1 5 0V20a4 4 0 0 1 -4 4H34Z"/><path opacity=".55" d="M0 37Q14 32 30 37T60 36V40H0Z"/></g></symbol>
+<symbol id="t-prairie" viewBox="0 0 60 40"><g stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"><path d="M10 36Q10 26 6 20M14 36Q14 24 16 16M21 36Q22 28 27 22M31 36Q31 22 29 12M37 36Q37 26 42 20M43 36Q44 24 41 16M51 36Q51 28 55 22"/></g><circle cx="47" cy="8" r="4.5" fill="currentColor" opacity=".5"/></symbol>
+<symbol id="t-wet" viewBox="0 0 60 40"><g stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"><path d="M16 33V12M28 33V8M40 33V14"/><path stroke-width="2.2" opacity=".6" d="M0 36q8-4 15 0t15 0t15 0t15 0"/></g><g fill="currentColor"><rect x="14" y="9" width="4" height="12" rx="2"/><rect x="26" y="5" width="4" height="12" rx="2"/><rect x="38" y="11" width="4" height="11" rx="2"/></g></symbol>
 </defs></svg>
 <header class="hero">
 <svg class="scene" viewBox="0 0 720 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
@@ -130,16 +146,25 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 </div>
 </header>
 <main class="wrap">
-<div class="card" id="authBox"><span id="acct">Sign in to save kits and use Premium on any device.</span><span id="badge" class="bdg" hidden>PREMIUM</span><div class="af" id="authForm"><label>Email<input type="text" id="aem" autocomplete="email"></label><button type="button" class="btn alt" id="aGo">Email me a sign-in link</button></div><button type="button" class="btn alt" id="aOut" hidden style="margin-top:8px">Sign out</button></div>
+<section class="how" aria-label="How it works">
+<div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M20.5 11.5L18 18l-6.5 2.5L14 14z"/></svg><p style="margin:0"><b>1. Pick your hunt</b><span>Game, weapon, terrain, weather and trip length.</span></p></div>
+<div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="20" height="24" rx="3"/><path d="M11 11l2 2 3.5-4M11 19l2 2 3.5-4M19 12h3M19 20h3"/></svg><p style="margin:0"><b>2. Get your kit</b><span>A checklist sized to your pack weight and budget.</span></p></div>
+<div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 26L12 9l6 10 3-5 8 12z"/><path d="M12 9V4l5 2-5 2"/></svg><p style="margin:0"><b>3. Hunt prepared</b><span>Check it off, save it, print it or take it offline.</span></p></div>
+</section>
+<p class="hint" style="margin:10px 0 0">New to hunting? <a href="new-hunter.html" style="color:var(--hi);font-weight:600">Read the beginner's guide</a>.</p>
+<div class="card" id="authBox" style="margin-top:14px"><span id="acct">Sign in to save kits and use Premium on any device.</span><span id="badge" class="bdg" hidden>PREMIUM</span><div class="af" id="authForm"><label>Email<input type="text" id="aem" autocomplete="email"></label><button type="button" class="btn alt" id="aGo">Email me a sign-in link</button></div><button type="button" class="btn alt" id="aOut" hidden style="margin-top:8px">Sign out</button></div>
 <h2>Gear builder</h2>
 <form class="card" id="builder" onsubmit="return false">
 <div class="grid">
+<div class="full"><span class="lbl">Start from a template</span><div class="chips" id="tpls"></div></div>
 <div class="full"><span class="lbl">Game</span><div class="gcards" id="gcards"></div></div>
 <div hidden><label for="game">Game</label><select id="game"><option>Elk</option><option>Mule deer</option><option>Whitetail</option><option>Turkey</option><option>Waterfowl</option><option>Small game</option></select></div>
-<div><label for="weap">Weapon</label><select id="weap"><option>Rifle</option><option>Bow</option><option>Muzzleloader</option><option>Shotgun</option></select></div>
+<div class="full"><span class="lbl">Weapon</span><div class="gcards sm" id="wcards"></div></div>
+<div hidden><label for="weap">Weapon</label><select id="weap"><option>Rifle</option><option>Bow</option><option>Muzzleloader</option><option>Shotgun</option></select></div>
 <div><label for="loc">Location</label><input type="text" id="loc" placeholder="Roosevelt National Forest, CO"></div>
 <div><label for="when">Hunt start date</label><input type="date" id="when"></div>
-<div><label for="ter">Terrain</label><select id="ter"><option>Mountains</option><option>Forest</option><option>Desert</option><option>Prairie</option><option>Wetlands</option></select></div>
+<div class="full"><span class="lbl">Terrain</span><div class="gcards sm" id="tcards"></div></div>
+<div hidden><label for="ter">Terrain</label><select id="ter"><option>Mountains</option><option>Forest</option><option>Desert</option><option>Prairie</option><option>Wetlands</option></select></div>
 <div class="full"><span class="lbl">Weather (pick all that apply)</span><div class="chips" id="wx"></div></div>
 <div class="full" hidden><button type="button" class="btn alt" id="wxBtn">Get live forecast (Premium)</button></div>
 <div><label for="days">Trip length</label><select id="days"><option value="1">1 day</option><option value="2">2 days</option><option value="4" selected>3 to 5 days</option><option value="8">6 to 10+ days</option></select></div>
@@ -193,13 +218,14 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <section id="savedWrap" hidden><h2>Saved kits</h2><div class="card" id="saved"></div></section>
 
 <section id="pricing"><h2>Wildmark Premium</h2><div class="grid">
-<div class="card"><h3>Free</h3><p class="hint">$0</p><p style="margin:8px 0 0">Gear builder and category picks<br>Gear library and printing<br>Up to 2 saved kits<br>Hunt journal and check-in plan</p></div>
+<div class="card"><h3>Free</h3><p class="hint">$0</p><p style="margin:8px 0 0">Gear builder and category picks<br>Gear library and printing<br>Up to 2 saved kits<br>Hunt log and check-in plan</p></div>
 <div class="card" style="border:2px solid var(--green)"><h3>Premium</h3><p style="margin:6px 0"><b id="price">$10.99</b> per month</p><p class="hint" style="margin:0">Renews monthly until you cancel. Cancel any time.</p><p style="margin:8px 0 0">Unlimited saved kits, synced across devices<br>Group hunts and food planner<br>Budget optimizer and weight breakdown<br>Hunt countdown with calendar reminders<br>Offline field card and PDF trip packets</p><button class="btn" id="goPro">Go Premium</button><p class="hint" id="proMsg"></p></div></div></section>
-<section><h2>Hunt journal</h2><div class="card"><label for="jn">What worked and what you left unused</label><textarea id="jn" rows="3"></textarea><button class="btn" id="jadd">Add entry</button><div id="jl"></div></div></section>
+<section><h2>Hunt log</h2><div class="card"><div class="stats" id="jstats"></div><div class="grid" style="margin-top:14px"><div><label for="jdays">Days hunted</label><input type="number" id="jdays" min="0" max="60" value="1"></div><div><label for="jhv">Game taken?</label><select id="jhv"><option>No</option><option>Yes</option></select></div></div><label for="jn" style="margin-top:12px">What worked and what you left unused</label><textarea id="jn" rows="3"></textarea><button class="btn" id="jadd">Add entry</button><div id="jl"></div></div></section>
+<section><h2>What's new</h2><div class="card"><p class="hint" style="margin:0 0 8px">Updated October 21, 2026</p><ul style="margin:0;padding-left:18px"><li>Pick game, weapon and terrain with pictures</li><li>One-tap hunt templates, from early-season elk to late-season waterfowl</li><li>Premium: weight breakdown, budget optimizer, hunt countdown with calendar reminders and an offline field card</li><li>Hunt log with days afield and game taken</li><li><a href="new-hunter.html" style="color:var(--hi);font-weight:600">A beginner's guide</a> to your first hunt</li></ul></div></section>
 <section><h2>About Wildmark Field Co.</h2><div class="card"><p style="margin:0">Wildmark builds gear lists for hunters who want to carry what they need and nothing they do not. Tell us the hunt and we size the kit to the game, the weather and your pack. Hunt prepared.</p></div></section>
-<section><h2>Gear library</h2><input type="text" id="lq" placeholder="Search gear" oninput="lib()"><div class="card" style="overflow-x:auto;margin-top:10px" id="lib"></div></section>
+<section><h2>Gear library</h2><input type="text" id="lq" placeholder="Search gear" oninput="lib()"><div class="lgrid" id="lib"></div><p style="text-align:center;margin:12px 0 0"><button type="button" class="btn alt" id="libMore">Show all gear</button></p></section>
 <p class="fine">Weights and prices are estimates. Always check current regulations, seasons, license and tag requirements for your unit before you go. Weather and terrain change fast: tell someone your plan.</p>
-<p class="fine"><a href="privacy.html">Privacy policy</a> &nbsp; <a href="terms.html">Terms of service</a> &nbsp; <a href="mailto:carsonwright2009@gmail.com">Contact</a> &nbsp; Wildmark Field Co.</p>
+<p class="fine"><a href="new-hunter.html">New-hunter guide</a> &nbsp; <a href="privacy.html">Privacy policy</a> &nbsp; <a href="terms.html">Terms of service</a> &nbsp; <a href="mailto:carsonwright2009@gmail.com">Contact</a> &nbsp; Wildmark Field Co.</p>
 <p class="fine">Works offline after your first visit, so you can check your kit without cell service.</p>
 </main>
 <div id="packet"></div>
@@ -207,10 +233,15 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <script>
 var $=function(i){return document.getElementById(i)};
 var WX=['Hot','Mild','Cold','Rain','Snow','Wind'],wx={Mild:1},chk={},cur=null,KEY='wildmark_kits';
-var GIC={'Elk':'g-elk','Mule deer':'g-mule','Whitetail':'g-white','Turkey':'g-turkey','Waterfowl':'g-duck','Small game':'g-rabbit'};
-function syncG(){[].forEach.call($('gcards').children,function(b){b.setAttribute('aria-pressed',b.dataset.g==$('game').value)})}
-[].forEach.call($('game').options,function(o){var b=document.createElement('button');b.type='button';b.className='gc';b.dataset.g=o.value;b.innerHTML='<svg viewBox="0 -8 120 108" aria-hidden="true"><use href="#'+GIC[o.value]+'"/></svg><span>'+esc(o.value)+'</span>';b.onclick=function(){$('game').value=o.value;syncG()};$('gcards').appendChild(b)});
+var GIC={'Elk':'g-elk','Mule deer':'g-mule','Whitetail':'g-white','Turkey':'g-turkey','Waterfowl':'g-duck','Small game':'g-rabbit'},WIC={'Rifle':'w-rifle','Bow':'w-bow','Muzzleloader':'w-muzz','Shotgun':'w-shotgun'},TIC={'Mountains':'t-mtn','Forest':'t-forest','Desert':'t-desert','Prairie':'t-prairie','Wetlands':'t-wet'};
+var CARDS=[['gcards','game',GIC,0],['wcards','weap',WIC,1],['tcards','ter',TIC,1]];
+function syncG(){CARDS.forEach(function(c){[].forEach.call($(c[0]).children,function(b){b.setAttribute('aria-pressed',b.dataset.g==$(c[1]).value)})})}
+CARDS.forEach(function(c){[].forEach.call($(c[1]).options,function(o){var b=document.createElement('button');b.type='button';b.className='gc'+(c[3]?' sm':'');b.dataset.g=o.value;b.innerHTML='<svg viewBox="'+(c[3]?'0 0 60 40':'0 -8 120 108')+'" aria-hidden="true"><use href="#'+c[2][o.value]+'"/></svg><span>'+esc(o.value)+'</span>';b.onclick=function(){$(c[1]).value=o.value;syncG()};$(c[0]).appendChild(b)})});
 syncG();
+function ping(n){try{var b=JSON.stringify({name:n});if(navigator.sendBeacon&&navigator.sendBeacon('/.netlify/functions/event',new Blob([b],{type:'application/json'})))return;fetch('/.netlify/functions/event',{method:'POST',headers:{'Content-Type':'application/json'},body:b,keepalive:true}).catch(function(){})}catch(e){}}
+try{if(!sessionStorage.getItem('wm_v')){sessionStorage.setItem('wm_v','1');ping('view')}}catch(e){ping('view')}
+var TPL=[['Early-season elk',{game:'Elk',weap:'Rifle',ter:'Mountains',days:'4',wt:'Balanced',bud:'Mid-range',skill:'Intermediate'},['Mild','Cold']],['Backcountry mule deer',{game:'Mule deer',weap:'Rifle',ter:'Mountains',days:'8',wt:'Ultralight',bud:'Mid-range',skill:'Experienced'},['Cold','Wind']],['Whitetail weekend',{game:'Whitetail',weap:'Rifle',ter:'Forest',days:'2',wt:'Comfort',bud:'Mid-range',skill:'Intermediate'},['Cold']],['Spring turkey',{game:'Turkey',weap:'Shotgun',ter:'Forest',days:'1',wt:'Balanced',bud:'Budget',skill:'Beginner'},['Mild','Rain']],['Late-season waterfowl',{game:'Waterfowl',weap:'Shotgun',ter:'Wetlands',days:'1',wt:'Comfort',bud:'Mid-range',skill:'Intermediate'},['Cold','Wind']],['Small game day',{game:'Small game',weap:'Shotgun',ter:'Prairie',days:'1',wt:'Balanced',bud:'Budget',skill:'Beginner'},['Mild']]];
+TPL.forEach(function(t){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t[0];b.onclick=function(){fill(t[1],t[2]);syncG();$('kname').value='';ping('template_used');build(false);$('result').scrollIntoView({behavior:'smooth'})};$('tpls').appendChild(b)});
 var big=function(c){return c.game=='Elk'||c.game=='Mule deer'||c.game=='Whitetail'};
 var not=function(c){return c.trip!='Day hunt'};
 // name, category, oz each, $ each (mid-range), priority, quantity fn (0 = skip)
@@ -340,7 +371,7 @@ $('list').addEventListener('click',function(e){var b=e.target.closest('.gh');if(
 $('list').addEventListener('change',function(e){var n=e.target.dataset.n;if(!n)return;chk[n]=e.target.checked;e.target.closest('.row').classList.toggle('done',e.target.checked);prog()});
 WX.forEach(function(w){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=w;b.setAttribute('aria-pressed',!!wx[w]);
  b.onclick=function(){if(wx[w])delete wx[w];else wx[w]=1;b.setAttribute('aria-pressed',!!wx[w])};$('wx').appendChild(b)});
-$('go').onclick=function(){$('kname').value='';build(false);$('result').scrollIntoView({behavior:'smooth'})};
+$('go').onclick=function(){$('kname').value='';ping('kit_built');build(false);$('result').scrollIntoView({behavior:'smooth'})};
 $('print').onclick=function(){window.print()};
 $('again').onclick=function(){$('result').hidden=true;cur=null;chk={};window.scrollTo({top:0,behavior:'smooth'})};
 function kits(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return window._k||[]}}
@@ -362,7 +393,11 @@ function rows(){var r=I.map(function(it){var g=GEAR[slug(it[0])]||{};return{id:s
  Object.keys(GEAR).forEach(function(k){var g=GEAR[k],re;if(!g.custom)return;try{re=new RegExp(g.when||'.')}catch(e){re=/$^/}
   r.push({id:k,n:g.name,cat:g.cat,oz:+g.oz||0,pr:+g.price||0,pri:g.pri||'Med',fn:function(c){return re.test([c.game,c.weap,c.ter,c.trip,Object.keys(c.wx).join(' ')].join(' '))?1:0},u:ok(g.url),star:!!g.star,hide:!!g.hide,custom:1})});return r}
 function items(){return rows().filter(function(r){return!r.hide}).map(function(r){return[r.n,r.cat,r.oz,r.pr,r.pri,r.fn,r.u,r.star]})}
-function lib(){var q=$('lq').value.toLowerCase();$('lib').innerHTML='<table><tr><th>Item</th><th>Category</th><th>Weight</th><th>Price</th></tr>'+rows().filter(function(r){return!r.hide&&(r.n+r.cat).toLowerCase().indexOf(q)>-1}).map(function(r){return'<tr><td>'+esc(r.n)+(r.star?' ★':'')+'</td><td>'+esc(r.cat)+'</td><td>'+r.oz+' oz</td><td>$'+r.pr+'</td></tr>'}).join('')+'</table>'}
+var LIBN=24,LIBALL=false;
+function lib(){var q=$('lq').value.toLowerCase(),a=rows().filter(function(r){return!r.hide&&(r.n+r.cat).toLowerCase().indexOf(q)>-1}),more=!q&&!LIBALL&&a.length>LIBN;
+ $('lib').innerHTML=(more?a.slice(0,LIBN):a).map(function(r){return'<div class="lc"><b>'+esc(r.n)+(r.star?' \u2605':'')+'</b><span class="lt">'+esc(r.cat)+'</span><span>'+r.oz+' oz \u00b7 $'+r.pr+'</span></div>'}).join('')||'<p class="hint">No gear matches.</p>';
+ $('libMore').parentNode.hidden=!more}
+$('libMore').onclick=function(){LIBALL=true;lib()};
 function track(){if(!DB||!UID)return;myB++;DB.doc('stats/'+UID).set({builds:myB}).catch(function(){})}
 var PREMIUM_LINK='https://buy.stripe.com/28EcN45O74uzgpO6lI2kw01',FREE_KITS=2,PRO=false;
 var OWN={},SW={'Frame pack':['ultralight frame pack',20],'Tent or shelter':['single-wall shelter',24],'Sleeping bag':['down quilt',10],'Sleeping pad':['short torso pad',5],'Stove and fuel':['canister stove with a small pot',4],'Insulated jacket':['hooded down puffy',5],'Binoculars':['compact 8x32 binoculars',10],'Tree stand and harness':['hang-on stand with sticks',80],'Pop-up blind':['brush-style blind',50],'Waders':['breathable waders',20],'Daypack':['frameless 25 L pack',10],'Water bottle (1 L)':['collapsible bottle',2]};
@@ -377,7 +412,7 @@ function extras(){if(!cur)return;pro();var c=cur.c,buy=0,n=0,sv=0;
  $('swapC').hidden=!sv;if(sv)$('swapP').textContent='Swapping the items marked "Lighter option" would save about '+(sv/16).toFixed(1)+' lb.';
  $('agency').href='https://www.google.com/search?q='+encodeURIComponent('state wildlife agency hunting regulations '+$('loc').value)}
 function fill(f,w){for(var k in f)if($(k))$(k).value=f[k];wx={};w.forEach(function(x){wx[x]=1});[].forEach.call($('wx').children,function(b){b.setAttribute('aria-pressed',!!wx[b.textContent])})}
-$('share').onclick=async function(){var f={};['game','weap','loc','ter','days','wt','bud','when','skill'].forEach(function(k){f[k]=$(k).value});
+$('share').onclick=async function(){ping('share_click');var f={};['game','weap','loc','ter','days','wt','bud','when','skill'].forEach(function(k){f[k]=$(k).value});
  var u=location.href.split('#')[0]+'#'+btoa(unescape(encodeURIComponent(JSON.stringify({f:f,wx:Object.keys(wx)})))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),m;
  try{await navigator.clipboard.writeText(u);m='Link copied. Send it to your hunting partner.'}catch(e){m=u}$('shareMsg').textContent=m};
 try{var hh=location.hash.match(/^#([A-Za-z0-9_-]{20,})$/);if(hh){var dd=JSON.parse(decodeURIComponent(escape(atob(hh[1].replace(/-/g,'+').replace(/_/g,'/')))));fill(dd.f,dd.wx||[]);build(false)}}catch(e){}
@@ -385,9 +420,11 @@ var PL={};try{PL=JSON.parse(localStorage.getItem('wildmark_plan')||'{}')}catch(e
 document.querySelectorAll('#trip [data-k]').forEach(function(el){var v=PL[el.dataset.k];if(v!=null){if(el.type=='checkbox')el.checked=!!v;else el.value=v}});
 $('trip').addEventListener('input',function(e){var k=e.target.dataset.k;if(!k)return;PL[k]=e.target.type=='checkbox'?e.target.checked:e.target.value;try{localStorage.setItem('wildmark_plan',JSON.stringify(PL))}catch(x){}});
 var J=[];try{J=JSON.parse(localStorage.getItem('wildmark_journal')||'[]')}catch(e){}
-function jr(){$('jl').innerHTML=J.map(function(j,i){return'<div class="saved"><span><b>'+esc(j.t)+'</b> <small>'+esc(j.d)+'</small><br>'+esc(j.n)+'</span><button class="btn alt" data-j="'+i+'">Delete</button></div>'}).join('')}
+function jr(){var dy=0,hv=0;J.forEach(function(j){dy+=+j.days||0;if(j.hv==='Yes')hv++});
+ $('jstats').innerHTML='<div><b>'+J.length+'</b><span>log entries</span></div><div><b>'+dy+'</b><span>days afield</span></div><div><b>'+hv+'</b><span>game taken</span></div>';
+ $('jl').innerHTML=J.map(function(j,i){return'<div class="saved"><span><b>'+esc(j.t)+'</b> <small>'+esc(j.d)+(j.days?' \u00b7 '+(+j.days)+' day'+(+j.days==1?'':'s'):'')+(j.hv==='Yes'?' \u00b7 game taken':'')+'</small><br>'+esc(j.n)+'</span><button class="btn alt" data-j="'+i+'">Delete</button></div>'}).join('')}
 function jsave(){try{localStorage.setItem('wildmark_journal',JSON.stringify(J))}catch(e){}}
-$('jadd').onclick=function(){var n=$('jn').value.trim();if(!n)return;J.unshift({t:$('kname').value||$('game').value,d:new Date().toLocaleDateString(),n:n});jsave();$('jn').value='';jr()};
+$('jadd').onclick=function(){var n=$('jn').value.trim();if(!n)return;J.unshift({t:$('kname').value||$('game').value,d:new Date().toLocaleDateString(),n:n,days:Math.max(0,Math.min(60,+$('jdays').value||0)),hv:$('jhv').value});jsave();$('jn').value='';jr()};
 $('jl').onclick=function(e){var i=e.target.dataset.j;if(i==null)return;J.splice(i,1);jsave();jr()};jr();
 function info(h){$('locInfo').hidden=false;$('locInfo').innerHTML=h}
 function links(){var l=$('loc').value.trim();if(!l)return'';var e=encodeURIComponent(l),t=' target="_blank" rel="noopener noreferrer"';return'<p><a href="https://www.google.com/maps/search/?api=1&query='+e+'"'+t+'>Open map</a><a href="https://www.google.com/search?q=weather+forecast+'+e+'"'+t+'>Live forecast</a><a href="https://www.onxmaps.com"'+t+'>onX Hunt</a></p>'}
@@ -478,11 +515,11 @@ async function refresh(){var q=new URLSearchParams(location.search).get('session
  if(q){var ar=null;try{ar=await api('activate?session_id='+encodeURIComponent(q))}catch(e){ar={error:'network'}}history.replaceState(null,'',location.pathname);window.__act=ar}
  try{var s=await api('status');setPro(!!s.premium);if(!s.premium&&window.__act&&window.__act.error)$('proMsg').textContent='Payment received, but activation failed: '+window.__act.error}catch(e){setPro(false)}}
 function ui(){var on=!!USER;$('aOut').hidden=!on;$('authForm').hidden=on;$('acct').textContent=on?'Signed in as '+USER.email+'. Your kits sync to your account.':'Sign in to save kits and use Premium on any device.'}
-$('aGo').onclick=async function(){var e=$('aem').value.trim();if(!e)return;$('acct').textContent='Sending...';try{var r=await fetch('/.netlify/functions/signin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})});var j=await r.json().catch(function(){return{}});$('acct').textContent=r.ok?'Check your email for the sign-in link (and spam).':(j.error==='bad_email'?'That email address does not look right.':'Could not send the link right now. Try again in a minute. ['+(j.error||r.status)+']')}catch(x){$('acct').textContent='Could not reach the server. Check your connection.'}};
+$('aGo').onclick=async function(){var e=$('aem').value.trim();if(!e)return;ping('signin_start');$('acct').textContent='Sending...';try{var r=await fetch('/.netlify/functions/signin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})});var j=await r.json().catch(function(){return{}});$('acct').textContent=r.ok?'Check your email for the sign-in link (and spam).':(j.error==='bad_email'?'That email address does not look right.':'Could not send the link right now. Try again in a minute. ['+(j.error||r.status)+']')}catch(x){$('acct').textContent='Could not reach the server. Check your connection.'}};
 $('aOut').onclick=function(){SB.auth.signOut()};
 $('goPro').onclick=async function(){if(!USER){$('proMsg').textContent='Sign in above first so Premium is tied to your account.';return}
  if(PRO){try{var p=await api('portal',{method:'POST'});if(p.url){location.href=p.url;return}}catch(e){}$('proMsg').textContent='Could not open billing. Try again.';return}
- location.href=PREMIUM_LINK+'?client_reference_id='+encodeURIComponent(USER.id)+'&prefilled_email='+encodeURIComponent(USER.email)};
+ ping('premium_click');location.href=PREMIUM_LINK+'?client_reference_id='+encodeURIComponent(USER.id)+'&prefilled_email='+encodeURIComponent(USER.email)};
 (function(){lib();if(!window.supabase){$('authForm').hidden=true;$('acct').textContent='Saved hunts are stored in this browser.';return}
  SB=window.supabase.createClient(SB_URL,SB_KEY);
  SB.auth.onAuthStateChange(function(ev,sess){SESS=sess;USER=sess?sess.user:null;ui();
