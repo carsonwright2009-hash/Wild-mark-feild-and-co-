@@ -20,7 +20,7 @@ exports.handler = async (e) => {
     });
     const gj = await g.json();
     const link = gj.action_link || (gj.properties && gj.properties.action_link);
-    if (!g.ok || !link) return reply({ error: 'link_failed' }, 502);
+    if (!g.ok || !link) { console.error('generate_link', g.status, JSON.stringify(gj).slice(0, 300)); return reply({ error: 'link_failed' }, 502); }
 
     const m = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -35,10 +35,12 @@ exports.handler = async (e) => {
     });
     if (!m.ok) {
       const mj = await m.json().catch(() => ({}));
+      console.error('resend', m.status, JSON.stringify(mj).slice(0, 300));
       return reply({ error: 'send_failed', detail: mj.message || '' }, 502);
     }
     return reply({ ok: true });
   } catch (err) {
+    console.error('signin error', err && err.message, 'env:', !!SB, !!SRK, !!RESEND, !!process.env.SITE_URL);
     return reply({ error: 'server_error' }, 500);
   }
 };
