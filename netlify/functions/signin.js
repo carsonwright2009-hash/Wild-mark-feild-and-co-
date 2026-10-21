@@ -39,8 +39,7 @@ async function run(e) {
     });
     if (!m.ok) {
       console.error('resend failed', m.status);
-      let t = ''; try { t = (await m.text()).slice(0, 120); } catch (_) {}
-      return reply({ error: 'send_failed', detail: m.status + ' ' + t }, 502);
+      return reply({ error: 'send_failed' }, 502);
     }
     return reply({ ok: true });
   } catch (err) {
