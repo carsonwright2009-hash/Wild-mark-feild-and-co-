@@ -24,7 +24,7 @@ async function run(e) {
     });
     const gj = await g.json();
     const link = gj.action_link || (gj.properties && gj.properties.action_link);
-    if (!g.ok || !link) { console.error('generate_link', g.status, JSON.stringify(gj).slice(0, 300)); return reply({ error: 'link_failed', detail: g.status + ' ' + JSON.stringify(gj).slice(0, 160) }, 502); }
+    if (!g.ok || !link) { console.error('generate_link', g.status, JSON.stringify(gj).slice(0, 300)); return reply({ error: 'link_failed', detail: g.status + ' ' + JSON.stringify(gj).slice(0, 120), key: SRK ? SRK.slice(0, 7) + '... len ' + SRK.length : 'missing' }, 502); }
 
     const m = await fetch('https://api.resend.com/emails', {
       method: 'POST',
