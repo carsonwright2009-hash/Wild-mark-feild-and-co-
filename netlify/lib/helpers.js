@@ -1,6 +1,6 @@
 const SB = process.env.SUPABASE_URL;
 const ANON = process.env.SUPABASE_ANON_KEY;
-const SRK = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SRK = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_K;
 const KEY = process.env.STRIPE_SECRET_KEY;
 
 async function stripe(path, { method = 'GET', body } = {}) {

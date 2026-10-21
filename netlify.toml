@@ -2,6 +2,10 @@
   publish = "."
   functions = "netlify/functions"
 
+[build.environment]
+  # These three are public by design (they ship in the page). Real secrets stay scanned.
+  SECRETS_SCAN_OMIT_KEYS = "SITE_URL,SUPABASE_URL,SUPABASE_ANON_KEY"
+
 [[headers]]
   for = "/sw.js"
   [headers.values]

@@ -2,7 +2,7 @@
 const { reply } = require('../lib/helpers');
 
 const SB = process.env.SUPABASE_URL;
-const SRK = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SRK = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_K;
 const RESEND = process.env.RESEND_API_KEY;
 const SITE = (process.env.SITE_URL || '').replace(/\/+$/, '') + '/';
 const FROM = process.env.MAIL_FROM || 'Wildmark Field Co. <onboarding@resend.dev>';
