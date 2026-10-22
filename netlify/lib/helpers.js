@@ -39,6 +39,15 @@ async function saveSub(row) {
   });
   if (!r.ok) throw new Error('db write failed');
 }
+// Free Premium list (set by the owner in the comps table). Only for a confirmed email; never expires if until is null.
+async function getComp(user) {
+  if (!user || !user.email || !(user.email_confirmed_at || user.confirmed_at)) return false;
+  const r = await fetch(SB + '/rest/v1/comps?email=eq.' + encodeURIComponent(String(user.email).toLowerCase()) + '&select=until', { headers: srk });
+  if (!r.ok) return false;
+  const j = await r.json();
+  if (!j[0]) return false;
+  return !j[0].until || new Date(j[0].until).getTime() > Date.now();
+}
 const reply = (o, c = 200) => ({ statusCode: c, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, body: JSON.stringify(o) });
 const isLive = (s) => !!s && (s.status === 'active' || s.status === 'trialing');
-module.exports = { stripe, getUser, getSub, saveSub, reply, isLive };
+module.exports = { stripe, getUser, getSub, saveSub, getComp, reply, isLive };
