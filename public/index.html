@@ -70,7 +70,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;p
 .ar{padding:10px 0;border-bottom:1px solid var(--line)}.af{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-top:6px}.af label{margin:0;font-size:12px}.af input{font:inherit;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}.af input[type=number]{width:78px}.af input[type=text]{width:170px}.af select{width:auto}.af .btn{padding:8px 12px}
 [hidden]{display:none!important}
 .chk{display:flex;gap:10px;align-items:center;color:var(--ink);font-size:15px;margin:10px 0}.chk input{width:20px;height:20px;accent-color:var(--green)}
-.ownb{font:inherit;font-size:13px;border:1px solid var(--line);background:none;color:inherit;border-radius:999px;padding:2px 10px;cursor:pointer}.row.own .n{opacity:.65}
+.ed{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;padding:8px 12px 12px;background:var(--surface);border:1px solid var(--line);border-top:0;margin:-2px 0 8px}.ed label{font-size:12px;display:block}.ed input[type=number]{width:84px}.ed .ownb,.sg .ownb{padding:6px 12px}.sg{margin:10px 0 4px}.sg .sgf{display:flex;gap:8px;flex-wrap:wrap}.sg .sgf input{flex:1;min-width:180px}.sg .m{font-size:13px}.ownb{font:inherit;font-size:13px;border:1px solid var(--line);background:none;color:inherit;border-radius:999px;padding:2px 10px;cursor:pointer}.row.own .n{opacity:.65}
 textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .lock{margin:8px 0 0}.pcard{margin-top:14px}.frow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.frow input{width:70px}.frow span small{display:block;color:var(--mute)}
 .bdg{background:var(--ochre);color:#fff;border-radius:999px;font-size:11px;font-weight:700;padding:2px 8px;margin-left:8px;letter-spacing:.05em;vertical-align:middle}
@@ -387,19 +387,22 @@ function truckItems(c,bm){return c.truck?TR.filter(function(t){return t[4](c)}).
 function truckHtml(a){if(!a||!a.length)return'';var w=0,p=0;a.forEach(function(i){w+=i.lb;p+=i.pr});
  var h='<div class="grp"><h3><span>Truck cache</span><small>stays at the truck, not in your pack \u00b7 '+w.toFixed(0)+' lb \u00b7 $'+Math.round(p)+'</small></h3><p class="hint" style="margin:4px 0 8px">Leave these at the trailhead so you can swap clothes, eat, drink and restock between trips on a multi-trip pack-out.</p>';
  a.forEach(function(i){h+='<label class="row '+i.pri+(chk[i.n]?' done':'')+'"><input type="checkbox" data-n="'+esc(i.n)+'"'+(chk[i.n]?' checked':'')+'><span class="t"><span class="n">'+esc(i.n)+'</span><br><span class="m">'+(i.lb*16).toFixed(0)+' oz \u00b7 $'+Math.round(i.pr)+' \u00b7 '+i.pri+' priority</span></span></label>'});
- return h+'</div>'}
+ return h+'<div class="sg"><button type="button" class="ownb" data-s="Truck cache">Suggest an item</button></div></div>'}
+var OVR={};try{OVR=JSON.parse(localStorage.getItem('wildmark_ovr')||'{}')}catch(e){}
+function saveOvr(){try{localStorage.setItem('wildmark_ovr',JSON.stringify(OVR))}catch(e){}}
 function build(keep){syncG();
  var c=ctx(),wm={Ultralight:.85,Balanced:1,Comfort:1.1}[c.wt],bm={'Budget':.6,'Mid-range':1,'Premium':1.7}[c.bud],out=[];
  items().forEach(function(it){var q=it[5](c);if(!q)return;if((c.wt=='Ultralight'||c.skill=='Experienced')&&it[4]=='Low')return;
   out.push({n:it[0],cat:it[1],q:q,lb:it[2]*q*(it[1]=='Water'||it[1]=='Food'?1:wm)/16,pr:it[3]*q*bm,pri:it[4],u:it[6],star:it[7]})});
+ out.forEach(function(i){var o=OVR[i.n];if(o){if(o.oz!=null)i.lb=o.oz*i.q/16;if(o.pr!=null)i.pr=o.pr*i.q;i.ed=1}});
  cur={c:c,items:out,truck:truckItems(c,bm)};if(!keep){chk={};track()}render();$('result').hidden=false}
 function render(){
  var cats={},tw=0,tp=0,h='';
  cur.items.forEach(function(i){(cats[i.cat]=cats[i.cat]||[]).push(i);tw+=i.lb;tp+=i.pr});
  Object.keys(cats).forEach(function(k){var a=cats[k],w=0,p=0;a.forEach(function(i){w+=i.lb;p+=i.pr});
   var op=!!OPEN[k];h+='<div class="grp"><h3><button type="button" class="gh" data-c="'+k+'" aria-expanded="'+op+'">'+k+'</button><small>'+w.toFixed(1)+' lb · $'+Math.round(p)+'</small></h3><div class="rec"'+(op?'':' hidden')+'>'+rec(k)+'</div>';
-  a.forEach(function(i){h+='<label class="row '+i.pri+(chk[i.n]?' done':'')+(OWN[i.n]?' own':'')+'"><input type="checkbox" data-n="'+i.n+'"'+(chk[i.n]?' checked':'')+'><span class="t"><span class="n">'+i.n+(i.q>1?' × '+i.q:'')+'</span><br><span class="m">'+(i.lb*16).toFixed(0)+' oz · $'+Math.round(i.pr)+' · '+i.pri+' priority'+(i.star?' · Wildmark pick':'')+(i.u?' · <a href="'+esc(i.u)+'" target="_blank" rel="noopener noreferrer">Get it</a>':'')+swap(i)+' · <button type="button" class="ownb" data-o="'+esc(i.n)+'">'+(OWN[i.n]?'Owned':'I own this')+'</button></span></span></label>'});
-  h+='</div>'});
+  a.forEach(function(i){h+='<label class="row '+i.pri+(chk[i.n]?' done':'')+(OWN[i.n]?' own':'')+'"><input type="checkbox" data-n="'+i.n+'"'+(chk[i.n]?' checked':'')+'><span class="t"><span class="n">'+i.n+(i.q>1?' × '+i.q:'')+'</span><br><span class="m">'+(i.lb*16).toFixed(0)+' oz · $'+Math.round(i.pr)+' · '+i.pri+' priority'+(i.star?' · Wildmark pick':'')+(i.u?' · <a href="'+esc(i.u)+'" target="_blank" rel="noopener noreferrer">Get it</a>':'')+swap(i)+' · <button type="button" class="ownb" data-o="'+esc(i.n)+'">'+(OWN[i.n]?'Owned':'I own this')+'</button> <button type="button" class="ownb" data-e="'+esc(i.n)+'">Edit</button>'+(i.ed?' <small>edited</small>':'')+'</span></span></label>'});
+  h+='<div class="sg"><button type="button" class="ownb" data-s="'+esc(k)+'">Suggest an item</button></div></div>'});
  h+=truckHtml(cur.truck);$('list').innerHTML=h;$('sW').textContent=tw.toFixed(1);$('sP').textContent='$'+Math.round(tp).toLocaleString('en-US');prog();extras();
  if(!$('kname').value)$('kname').value=$('game').value+' · '+$('days').selectedOptions[0].text}
 function prog(){var n=cur.items.length,d=cur.items.filter(function(i){return chk[i.n]}).length,p=n?Math.round(d/n*100):0;$('sK').textContent=p+'%';$('bar').style.width=p+'%'}
@@ -423,6 +426,16 @@ function rec(k){var c=cur.c,s=[c.game,c.weap,c.ter,c.trip,Object.keys(c.wx).join
  items().forEach(function(it){if(it[1]==k&&it[7]&&it[6])h='<div class="p"><b>'+esc(it[0])+' (Wildmark pick)</b><span class="w">Where to get it: <a href="'+esc(it[6])+'" target="_blank" rel="noopener noreferrer">Buy</a></span></div>'+h});
  return (h||'<div class="p"><span>No picks for this category yet.</span></div>')+'<p class="f">Suggestions for your hunt, not endorsements. Check current price, fit and availability with the seller.</p>'}
 $('list').addEventListener('click',function(e){var b=e.target.closest('.gh');if(!b)return;var k=b.dataset.c;OPEN[k]=!OPEN[k];b.setAttribute('aria-expanded',OPEN[k]);b.parentNode.nextElementSibling.hidden=!OPEN[k]});
+$('list').addEventListener('click',function(e){var t=e.target;if(!t.dataset)return;
+ if(t.dataset.e!=null){e.preventDefault();var row=t.closest('.row'),nx=row.nextElementSibling;if(nx&&nx.classList.contains('ed')){nx.remove();return}
+  var it=cur.items.filter(function(i){return i.n==t.dataset.e})[0];if(!it)return;var ox=(it.lb*16/it.q).toFixed(1),pr=(it.pr/it.q).toFixed(0),d=document.createElement('div');d.className='ed';
+  d.innerHTML='<div><label>Weight each (oz)</label><input type="number" min="0" step="0.1" value="'+ox+'" data-f="oz"></div><div><label>Price each ($)</label><input type="number" min="0" step="1" value="'+pr+'" data-f="pr"></div><button type="button" class="ownb" data-es="'+esc(it.n)+'">Save</button>'+(OVR[it.n]?'<button type="button" class="ownb" data-er="'+esc(it.n)+'">Reset</button>':'');row.after(d);return}
+ if(t.dataset.es!=null){var d2=t.closest('.ed'),oz=parseFloat(d2.querySelector('[data-f=oz]').value),pc=parseFloat(d2.querySelector('[data-f=pr]').value);OVR[t.dataset.es]={oz:isNaN(oz)||oz<0?null:oz,pr:isNaN(pc)||pc<0?null:pc};saveOvr();build(true);return}
+ if(t.dataset.er!=null){delete OVR[t.dataset.er];saveOvr();build(true);return}
+ if(t.dataset.s!=null){var box=t.parentNode,cat=t.dataset.s;box.innerHTML='<div class="sgf"><input type="text" maxlength="300" placeholder="What should we add to '+esc(cat)+'?" aria-label="Suggest an item for '+esc(cat)+'"><button type="button" class="ownb" data-sg="'+esc(cat)+'">Send</button></div>';box.querySelector('input').focus();return}
+ if(t.dataset.sg!=null){var bx=t.closest('.sg'),inp=bx.querySelector('input'),v=inp.value.trim();if(v.length<3){inp.focus();return}
+  t.disabled=true;fetch('/.netlify/functions/suggest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:t.dataset.sg,body:v})}).then(function(r){if(r.ok){bx.innerHTML='<span class="m">Thanks! Every suggestion gets read.</span>'}else{return r.json().then(function(j){t.disabled=false;bx.insertAdjacentHTML('beforeend','<div class="m">'+esc(j.error||'Could not send. Try again.')+'</div>')}).catch(function(){t.disabled=false})}}).catch(function(){t.disabled=false});return}
+});
 $('list').addEventListener('change',function(e){var n=e.target.dataset.n;if(!n)return;chk[n]=e.target.checked;e.target.closest('.row').classList.toggle('done',e.target.checked);prog()});
 WX.forEach(function(w){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=w;b.setAttribute('aria-pressed',!!wx[w]);
  b.onclick=function(){if(wx[w])delete wx[w];else wx[w]=1;b.setAttribute('aria-pressed',!!wx[w])};$('wx').appendChild(b)});
