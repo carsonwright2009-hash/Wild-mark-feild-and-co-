@@ -91,6 +91,21 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 #packet{display:none}
 @media print{body.pk>*:not(#packet){display:none!important}body.pk #packet{display:block;padding:16px;color:#000;background:#fff;font:14px/1.5 system-ui,sans-serif}#packet h1{font-size:24px;margin:0}#packet h2{margin:14px 0 4px;font-size:16px}#packet p{margin:2px 0}}
 @media print{.hero,#builder,.actions,#savedWrap,.fine{display:none}body{background:#fff;color:#000}}
+
+html{scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+section[id],h2[id]{scroll-margin-top:58px}
+.snav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.snr{max-width:720px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;padding:0 10px;scrollbar-width:none}.snr::-webkit-scrollbar{display:none}
+.snr a,.snr button{font:inherit;font-size:14px;font-weight:600;color:var(--green);text-decoration:none;background:none;border:0;padding:14px 11px;white-space:nowrap;cursor:pointer;min-height:44px}.snr a,.snr button{padding-left:9px;padding-right:9px}
+:root[data-theme="dark"] .snr a,:root[data-theme="dark"] .snr button{color:var(--hi)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .snr a,:root:not([data-theme="light"]) .snr button{color:var(--hi)}}
+.snq{max-width:720px;margin:0 auto;padding:0 14px 12px}.snq input{width:100%;box-sizing:border-box}
+#snR a{display:block;padding:12px 4px;border-bottom:1px solid var(--line);color:inherit;text-decoration:none;font-size:15px}
+.fold summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:48px}.fold summary::-webkit-details-marker{display:none}.fold summary h2{margin:20px 0 8px}.fold summary::after{content:"+";font-size:28px;color:var(--mute);padding:0 6px}.fold[open] summary::after{content:"\2212"}
+.ptag{display:inline-block;margin-left:8px;font:700 11px/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#4a3a14;background:#e6c97d;border-radius:999px;padding:4px 8px;vertical-align:middle}
+#go{position:sticky;bottom:12px;z-index:6;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+#toTop{position:fixed;right:14px;bottom:18px;z-index:60;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--green);font-size:22px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s}#toTop.on{opacity:1;pointer-events:auto}
+:root[data-theme="dark"] #toTop{color:var(--hi)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #toTop{color:var(--hi)}}
+@media(pointer:coarse){.ownb{min-height:36px;padding:6px 12px}}
 </style>
 </head>
 <body>
@@ -151,6 +166,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <p>Tell us the hunt. Get a kit sized to the game, the weather and your pack.</p>
 </div>
 </header>
+<nav class="snav" id="snav" aria-label="Page sections"><div class="snr"><a href="#build">Build</a><a href="#truckbox">Truck box</a><a href="#layer">Layering</a><a href="#pricing">Premium</a><a href="#library">Gear</a><button type="button" id="snS" aria-label="Search the site" aria-expanded="false">Search</button></div><div class="snq" id="snq" hidden><input type="search" id="snI" placeholder="Search tools or gear" autocomplete="off" aria-label="Search tools or gear"><div id="snR"></div></div></nav>
 <main class="wrap">
 <section class="how" aria-label="How it works">
 <div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M20.5 11.5L18 18l-6.5 2.5L14 14z"/></svg><p style="margin:0"><b>1. Pick your hunt</b><span>Game, weapon, terrain, weather and trip length.</span></p></div>
@@ -159,19 +175,19 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 </section>
 <p class="hint" style="margin:10px 0 0">New to hunting? <a href="new-hunter.html" style="color:var(--hi);font-weight:600">Read the beginner's guide</a>.</p>
 <div class="card" id="authBox" style="margin-top:14px"><span id="acct">Sign in to save kits and use Premium on any device.</span><span id="badge" class="bdg" hidden>PREMIUM</span><div class="af" id="authForm"><label>Email<input type="text" id="aem" autocomplete="email"></label><button type="button" class="btn alt" id="aGo">Email me a sign-in link</button></div><button type="button" class="btn alt" id="aOut" hidden style="margin-top:8px">Sign out</button></div>
-<h2>Gear builder</h2>
+<h2 id="build">Gear builder</h2>
 <form class="card" id="builder" onsubmit="return false">
 <div class="grid">
 <div class="full"><span class="lbl">Start from a template</span><div class="chips" id="tpls"></div></div>
-<div class="full"><span class="lbl">Game</span><div class="gcards" id="gcards"></div></div>
+<div class="full"><span class="lbl">1. Pick your game</span><div class="gcards" id="gcards"></div></div>
 <div hidden><label for="game">Game</label><select id="game"><option>Elk</option><option>Mule deer</option><option>Whitetail</option><option>Turkey</option><option>Waterfowl</option><option>Small game</option><option>Upland birds</option></select></div>
-<div class="full"><span class="lbl">Weapon</span><div class="gcards sm" id="wcards"></div></div>
+<div class="full"><span class="lbl">2. Pick your weapon</span><div class="gcards sm" id="wcards"></div></div>
 <div hidden><label for="weap">Weapon</label><select id="weap"><option>Rifle</option><option>Bow</option><option>Muzzleloader</option><option>Shotgun</option></select></div>
 <div><label for="loc">Location</label><input type="text" id="loc" placeholder="Roosevelt National Forest, CO"></div>
 <div><label for="when">Hunt start date</label><input type="date" id="when"></div>
-<div class="full"><span class="lbl">Terrain</span><div class="gcards sm" id="tcards"></div></div>
+<div class="full"><span class="lbl">3. Pick the terrain</span><div class="gcards sm" id="tcards"></div></div>
 <div hidden><label for="ter">Terrain</label><select id="ter"><option>Mountains</option><option>Forest</option><option>Desert</option><option>Prairie</option><option>Wetlands</option></select></div>
-<div class="full"><span class="lbl">Weather (pick all that apply)</span><div class="chips" id="wx"></div></div>
+<div class="full"><span class="lbl">4. Weather (pick all that apply)</span><div class="chips" id="wx"></div></div>
 <div class="full" hidden><button type="button" class="btn alt" id="wxBtn">Get live forecast (Premium)</button></div>
 <div><label for="days">Trip length</label><select id="days"><option value="1">1 day</option><option value="2">2 days</option><option value="4" selected>3 to 5 days</option><option value="8">6 to 10+ days</option></select></div>
 <div><label for="wt">Pack weight</label><select id="wt"><option>Ultralight</option><option selected>Balanced</option><option>Comfort</option></select></div>
@@ -224,6 +240,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 
 <section id="savedWrap" hidden><h2>Saved kits</h2><div class="card" id="saved"></div></section>
 
+<section id="truckbox"><h2>Truck box checklist</h2><div class="card"><p style="margin:0 0 6px">The short list to keep in your truck for longer hunts and multi-trip pack-outs. Tick items as you pack the box. It saves on this phone.</p><div id="tbl"></div><div class="row2" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button type="button" class="btn alt" id="tbPrint">Print or save as PDF</button><button type="button" class="btn alt" id="tbReset">Clear ticks</button></div></div></section>
 <section id="layer"><h2>Layering system builder</h2><div class="card pcard"><p style="margin:0">Build a full clothing system for your hunt, from base layer to rain shell, matched to the temperature, how much you move and the weather. Compare picks across seven brands with an estimated total cost.</p><p class="lock hint">Premium feature. Go Premium to unlock it.</p><div class="pbody">
 <div class="grid" style="margin-top:14px">
 <div><label for="lpur">Hunt type</label><select id="lpur"><option value="back">Big game, backcountry</option><option value="truck">Big game, day hunt or truck camp</option><option value="stand">Whitetail from a stand or blind</option><option value="water">Waterfowl</option><option value="turkey">Turkey</option><option value="upland">Upland and small game</option></select></div>
@@ -239,15 +256,15 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <section id="pricing"><h2>Wildmark Premium</h2><div class="grid">
 <div class="card"><h3>Free</h3><p class="hint">$0</p><p style="margin:8px 0 0">Gear builder and category picks<br>Gear library and printing<br>Up to 2 saved kits<br>Hunt log and check-in plan</p></div>
 <div class="card" style="border:2px solid var(--green)"><h3>Premium</h3><p style="margin:6px 0"><b id="price">$10.99</b> per month</p><p class="hint" style="margin:0">Renews monthly until you cancel. Cancel any time.</p><p style="margin:8px 0 0">Unlimited saved kits, synced across devices<br>Group hunts and food planner<br>Layering system builder with 7 brands<br>Budget optimizer and weight breakdown<br>Hunt countdown with calendar reminders<br>Offline field card and PDF trip packets</p><button class="btn" id="goPro">Go Premium</button><p class="hint" id="proMsg"></p></div></div></section>
-<section id="truckbox"><h2>Truck box checklist</h2><div class="card"><p style="margin:0 0 6px">The short list to keep in your truck for longer hunts and multi-trip pack-outs. Tick items as you pack the box. It saves on this phone.</p><div id="tbl"></div><div class="row2" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button type="button" class="btn alt" id="tbPrint">Print or save as PDF</button><button type="button" class="btn alt" id="tbReset">Clear ticks</button></div></div></section>
-<section><h2>Hunt log</h2><div class="card"><div class="stats" id="jstats"></div><div class="grid" style="margin-top:14px"><div><label for="jdays">Days hunted</label><input type="number" id="jdays" min="0" max="60" value="1"></div><div><label for="jhv">Game taken?</label><select id="jhv"><option>No</option><option>Yes</option></select></div></div><label for="jn" style="margin-top:12px">What worked and what you left unused</label><textarea id="jn" rows="3"></textarea><button class="btn" id="jadd">Add entry</button><div id="jl"></div></div></section>
-<section><h2>What's new</h2><div class="card"><p class="hint" style="margin:0 0 8px">Updated October 21, 2026</p><ul style="margin:0;padding-left:18px"><li>Pick game, weapon and terrain with pictures</li><li>One-tap hunt templates, from early-season elk to late-season waterfowl</li><li>Premium: layering system builder that compares seven clothing brands, weight breakdown, budget optimizer, hunt countdown with calendar reminders and an offline field card</li><li>Hunt log with days afield and game taken</li><li><a href="new-hunter.html" style="color:var(--hi);font-weight:600">A beginner's guide</a> to your first hunt</li></ul></div></section>
-<section><h2>About Wildmark Field Co.</h2><div class="card"><p style="margin:0">Wildmark builds gear lists for hunters who want to carry what they need and nothing they do not. Tell us the hunt and we size the kit to the game, the weather and your pack. Hunt prepared.</p></div></section>
-<section><h2>Gear library</h2><input type="text" id="lq" placeholder="Search gear" oninput="lib()"><div class="lgrid" id="lib"></div><p style="text-align:center;margin:12px 0 0"><button type="button" class="btn alt" id="libMore">Show all gear</button></p></section>
+<section id="library"><h2>Gear library</h2><input type="text" id="lq" placeholder="Search gear" oninput="lib()"><div class="lgrid" id="lib"></div><p style="text-align:center;margin:12px 0 0"><button type="button" class="btn alt" id="libMore">Show all gear</button></p></section>
+<section id="hlog"><details class="fold"><summary><h2>Hunt log</h2></summary><div class="card"><div class="stats" id="jstats"></div><div class="grid" style="margin-top:14px"><div><label for="jdays">Days hunted</label><input type="number" id="jdays" min="0" max="60" value="1"></div><div><label for="jhv">Game taken?</label><select id="jhv"><option>No</option><option>Yes</option></select></div></div><label for="jn" style="margin-top:12px">What worked and what you left unused</label><textarea id="jn" rows="3"></textarea><button class="btn" id="jadd">Add entry</button><div id="jl"></div></div></details></section>
+<section id="whatsnew"><details class="fold"><summary><h2>What's new</h2></summary><div class="card"><p class="hint" style="margin:0 0 8px">Updated October 21, 2026</p><ul style="margin:0;padding-left:18px"><li>Pick game, weapon and terrain with pictures</li><li>One-tap hunt templates, from early-season elk to late-season waterfowl</li><li>Premium: layering system builder that compares seven clothing brands, weight breakdown, budget optimizer, hunt countdown with calendar reminders and an offline field card</li><li>Hunt log with days afield and game taken</li><li><a href="new-hunter.html" style="color:var(--hi);font-weight:600">A beginner's guide</a> to your first hunt</li></ul></div></details></section>
+<section id="about"><details class="fold"><summary><h2>About Wildmark Field Co.</h2></summary><div class="card"><p style="margin:0">Wildmark builds gear lists for hunters who want to carry what they need and nothing they do not. Tell us the hunt and we size the kit to the game, the weather and your pack. Hunt prepared.</p></div></details></section>
 <p class="fine">Weights and prices are estimates. Always check current regulations, seasons, license and tag requirements for your unit before you go. Weather and terrain change fast: tell someone your plan.</p>
 <p class="fine"><a href="new-hunter.html">New-hunter guide</a> &nbsp; <a href="privacy.html">Privacy policy</a> &nbsp; <a href="terms.html">Terms of service</a> &nbsp; <a href="mailto:carsonwright2009@gmail.com">Contact</a> &nbsp; Wildmark Field Co.</p>
 <p class="fine">Works offline after your first visit, so you can check your kit without cell service.</p>
 </main>
+<button type="button" id="toTop" aria-label="Back to top">↑</button>
 <div id="packet"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -587,6 +604,24 @@ $('tbl').addEventListener('change',function(e){var t=e.target.dataset.t;if(!t)re
 $('tbReset').onclick=function(){TBS={};try{localStorage.removeItem(TBK)}catch(x){}tbR()};
 $('tbPrint').onclick=function(){var h='<h1>Truck box checklist</h1><p>Wildmark Field Co.</p>';TB.forEach(function(g){h+='<h2>'+esc(g[0])+'</h2>'+g[1].map(function(t){return'<p>'+(TBS[t]?'&#9745;':'&#9744;')+' '+esc(t)+'</p>'}).join('')});$('packet').innerHTML=h;document.body.classList.add('pk');var done=function(){document.body.classList.remove('pk');window.removeEventListener('afterprint',done)};window.addEventListener('afterprint',done);window.print()};
 
+
+(function(){
+var SEC=[['Gear builder','#build','build kit hunt game weapon terrain'],['Your kit','#result','kit list pack weight'],['Saved kits','#savedWrap','saved'],['Truck box checklist','#truckbox','truck cache supplies clothes'],['Layering system builder','#layer','layers clothing sitka first lite jacket base'],['Premium and pricing','#pricing','premium upgrade price subscription'],['Gear library','#library','gear products'],['Hunt log','#hlog','log journal stats'],["What's new",'#whatsnew','updates new'],['About Wildmark','#about','about founder']];
+function go(h){var el=$(h.slice(1));if(!el)return;if(el.hidden){el=$('build')}var d=el.querySelector&&el.querySelector('details');if(d)d.open=true;el.scrollIntoView({block:'start'})}
+window.wmGo=go;
+$('snav').addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(a){e.preventDefault();go(a.getAttribute('href'));$('snq').hidden=true;$('snS').setAttribute('aria-expanded','false')}});
+$('snS').onclick=function(){var q=$('snq');q.hidden=!q.hidden;$('snS').setAttribute('aria-expanded',String(!q.hidden));if(!q.hidden)$('snI').focus()};
+function sres(){var q=$('snI').value.trim().toLowerCase(),h='';if(!q){$('snR').innerHTML='';return}
+ SEC.forEach(function(x){if((x[0]+' '+x[2]).toLowerCase().indexOf(q)>-1)h+='<a href="'+x[1]+'">'+esc(x[0])+'</a>'});
+ h+='<a href="#library" data-g="'+esc(q)+'">Search the gear library for \u201c'+esc(q)+'\u201d</a>';$('snR').innerHTML=h}
+$('snI').addEventListener('input',sres);
+$('snI').addEventListener('keydown',function(e){if(e.key=='Enter'){var a=$('snR').querySelector('a');if(a)a.click()}});
+$('snR').addEventListener('click',function(e){var a=e.target.closest('a');if(!a)return;e.preventDefault();if(a.dataset.g!=null){$('lq').value=a.dataset.g;lib()}go(a.getAttribute('href'));$('snq').hidden=true;$('snS').setAttribute('aria-expanded','false');$('snI').value='';$('snR').innerHTML=''});
+var tt=$('toTop');window.addEventListener('scroll',function(){tt.classList.toggle('on',window.scrollY>900)},{passive:true});
+tt.onclick=function(){window.scrollTo({top:0})};
+[].forEach.call(document.querySelectorAll('.pcard > h3'),function(h){var s=document.createElement('span');s.className='ptag';s.textContent='Premium';h.appendChild(s)});
+var lh=document.querySelector('#layer > h2');if(lh){var t=document.createElement('span');t.className='ptag';t.textContent='Premium';lh.appendChild(t)}
+})();
 layer();gate();
 function pro(){food();group();wbk();bopt();cd();gate()}
 $('foodRows').addEventListener('input',function(e){var i=e.target.dataset.f;if(i==null)return;FQ[i]=+e.target.value||0;save2();food()});
