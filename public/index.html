@@ -177,6 +177,7 @@ textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--line);borde
 <div><label for="wt">Pack weight</label><select id="wt"><option>Ultralight</option><option selected>Balanced</option><option>Comfort</option></select></div>
 <div><label for="bud">Budget</label><select id="bud"><option>Budget</option><option selected>Mid-range</option><option>Premium</option></select></div>
 <div><label for="skill">Skill level</label><select id="skill"><option>Beginner</option><option selected>Intermediate</option><option>Experienced</option></select></div>
+<div class="full"><label for="truck">Truck cache</label><select id="truck"><option value="No">No cache, everything is in my pack</option><option value="Yes">Yes, I will keep a cache at the truck</option></select></div>
 </div>
 <button class="btn" id="go">Build my kit</button>
 </form>
@@ -362,12 +363,35 @@ var I=[
 ];
 function ctx(){var d=+$('days').value,g=$('game').value,t=$('ter').value;
  var trip=d==1?'Day hunt':d==2?'Overnight':(t=='Mountains'||g=='Elk'||g=='Mule deer')?'Backcountry':'Base camp';
- return{game:g,weap:$('weap').value,ter:t,wx:wx,days:d,wt:$('wt').value,bud:$('bud').value,trip:trip,skill:$('skill').value}}
+ return{game:g,weap:$('weap').value,ter:t,wx:wx,days:d,wt:$('wt').value,bud:$('bud').value,trip:trip,skill:$('skill').value,truck:$('truck').value=='Yes'}}
+var TR=[
+['Spare base layer, socks and underwear',14,60,'High',function(){return 1}],
+['Dry change of clothes (pants, shirt, warm layer)',40,100,'High',function(){return 1}],
+['Camp shoes or sandals',20,30,'Med',function(){return 1}],
+['Spare dry boots',64,150,'Med',function(c){return c.days>=4?1:0}],
+['Extra game bags for repeat pack-out trips',16,40,'High',function(c){return big(c)?1:0}],
+['Cooler and ice for meat',160,60,'High',function(c){return big(c)?1:0}],
+['Meat pack-out frame or spare pack',64,150,'Med',function(c){return big(c)&&c.trip=='Backcountry'?1:0}],
+['Real food: easy meals, snacks and electrolyte mix',48,40,'High',function(){return 1}],
+['Water (2 gallons)',256,5,'High',function(){return 1}],
+['Full first-aid kit',24,40,'High',function(){return 1}],
+['Emergency blanket and an extra warm layer',12,20,'Med',function(){return 1}],
+['Spare headlamp batteries and a power bank',12,30,'Med',function(){return 1}],
+['Jump pack or cables, and a tire inflator',80,60,'Med',function(){return 1}],
+['Spare vehicle key and a printed copy of your trip plan',2,5,'Med',function(){return 1}],
+['Camp stove and fuel for a hot meal after the hike out',24,60,'Low',function(c){return c.days>=2?1:0}],
+['Knife sharpener and spare blades',6,15,'Low',function(c){return big(c)?1:0}],
+['Towel, wipes and trash bags',16,15,'Low',function(){return 1}]];
+function truckItems(c,bm){return c.truck?TR.filter(function(t){return t[4](c)}).map(function(t){return{n:t[0],cat:'Truck cache',q:1,lb:t[1]/16,pr:t[2]*bm,pri:t[3]}}):[]}
+function truckHtml(a){if(!a||!a.length)return'';var w=0,p=0;a.forEach(function(i){w+=i.lb;p+=i.pr});
+ var h='<div class="grp"><h3><span>Truck cache</span><small>stays at the truck, not in your pack \u00b7 '+w.toFixed(0)+' lb \u00b7 $'+Math.round(p)+'</small></h3><p class="hint" style="margin:4px 0 8px">Leave these at the trailhead so you can swap clothes, eat, drink and restock between trips on a multi-trip pack-out.</p>';
+ a.forEach(function(i){h+='<label class="row '+i.pri+(chk[i.n]?' done':'')+'"><input type="checkbox" data-n="'+esc(i.n)+'"'+(chk[i.n]?' checked':'')+'><span class="t"><span class="n">'+esc(i.n)+'</span><br><span class="m">'+(i.lb*16).toFixed(0)+' oz \u00b7 $'+Math.round(i.pr)+' \u00b7 '+i.pri+' priority</span></span></label>'});
+ return h+'</div>'}
 function build(keep){syncG();
  var c=ctx(),wm={Ultralight:.85,Balanced:1,Comfort:1.1}[c.wt],bm={'Budget':.6,'Mid-range':1,'Premium':1.7}[c.bud],out=[];
  items().forEach(function(it){var q=it[5](c);if(!q)return;if((c.wt=='Ultralight'||c.skill=='Experienced')&&it[4]=='Low')return;
   out.push({n:it[0],cat:it[1],q:q,lb:it[2]*q*(it[1]=='Water'||it[1]=='Food'?1:wm)/16,pr:it[3]*q*bm,pri:it[4],u:it[6],star:it[7]})});
- cur={c:c,items:out};if(!keep){chk={};track()}render();$('result').hidden=false}
+ cur={c:c,items:out,truck:truckItems(c,bm)};if(!keep){chk={};track()}render();$('result').hidden=false}
 function render(){
  var cats={},tw=0,tp=0,h='';
  cur.items.forEach(function(i){(cats[i.cat]=cats[i.cat]||[]).push(i);tw+=i.lb;tp+=i.pr});
@@ -375,7 +399,7 @@ function render(){
   var op=!!OPEN[k];h+='<div class="grp"><h3><button type="button" class="gh" data-c="'+k+'" aria-expanded="'+op+'">'+k+'</button><small>'+w.toFixed(1)+' lb · $'+Math.round(p)+'</small></h3><div class="rec"'+(op?'':' hidden')+'>'+rec(k)+'</div>';
   a.forEach(function(i){h+='<label class="row '+i.pri+(chk[i.n]?' done':'')+(OWN[i.n]?' own':'')+'"><input type="checkbox" data-n="'+i.n+'"'+(chk[i.n]?' checked':'')+'><span class="t"><span class="n">'+i.n+(i.q>1?' × '+i.q:'')+'</span><br><span class="m">'+(i.lb*16).toFixed(0)+' oz · $'+Math.round(i.pr)+' · '+i.pri+' priority'+(i.star?' · Wildmark pick':'')+(i.u?' · <a href="'+esc(i.u)+'" target="_blank" rel="noopener noreferrer">Get it</a>':'')+swap(i)+' · <button type="button" class="ownb" data-o="'+esc(i.n)+'">'+(OWN[i.n]?'Owned':'I own this')+'</button></span></span></label>'});
   h+='</div>'});
- $('list').innerHTML=h;$('sW').textContent=tw.toFixed(1);$('sP').textContent='$'+Math.round(tp).toLocaleString('en-US');prog();extras();
+ h+=truckHtml(cur.truck);$('list').innerHTML=h;$('sW').textContent=tw.toFixed(1);$('sP').textContent='$'+Math.round(tp).toLocaleString('en-US');prog();extras();
  if(!$('kname').value)$('kname').value=$('game').value+' · '+$('days').selectedOptions[0].text}
 function prog(){var n=cur.items.length,d=cur.items.filter(function(i){return chk[i.n]}).length,p=n?Math.round(d/n*100):0;$('sK').textContent=p+'%';$('bar').style.width=p+'%'}
 var OPEN={};
@@ -406,7 +430,7 @@ $('print').onclick=function(){window.print()};
 $('again').onclick=function(){$('result').hidden=true;cur=null;chk={};window.scrollTo({top:0,behavior:'smooth'})};
 function kits(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return window._k||[]}}
 function put(a){window._k=a;try{localStorage.setItem(KEY,JSON.stringify(a))}catch(e){}}
-$('save').onclick=function(){var a=kits(),f={};if(!PRO&&a.length>=FREE_KITS){$('shareMsg').textContent='Free accounts save up to '+FREE_KITS+' kits. Delete one, or go Premium for unlimited saves.';return}['game','weap','loc','ter','days','wt','bud','skill'].forEach(function(k){f[k]=$(k).value});
+$('save').onclick=function(){var a=kits(),f={};if(!PRO&&a.length>=FREE_KITS){$('shareMsg').textContent='Free accounts save up to '+FREE_KITS+' kits. Delete one, or go Premium for unlimited saves.';return}['game','weap','loc','ter','days','wt','bud','skill','truck'].forEach(function(k){f[k]=$(k).value});
  var k={id:Date.now()+'',name:$('kname').value||'Untitled kit',f:f,wx:Object.keys(wx),chk:chk};a.unshift(k);put(a);dbSave(k);list()};
 function list(){var a=kits();$('savedWrap').hidden=!a.length;
  $('saved').innerHTML=a.map(function(k,i){return '<div class="saved"><span>'+k.name.replace(/</g,'&lt;')+'</span><span><button class="btn alt" data-o="'+i+'">Open</button> <button class="btn alt" data-d="'+i+'">Delete</button></span></div>'}).join('')}
@@ -442,7 +466,7 @@ function extras(){if(!cur)return;pro();var c=cur.c,buy=0,n=0,sv=0;
  $('swapC').hidden=!sv;if(sv)$('swapP').textContent='Swapping the items marked "Lighter option" would save about '+(sv/16).toFixed(1)+' lb.';
  $('agency').href='https://www.google.com/search?q='+encodeURIComponent('state wildlife agency hunting regulations '+$('loc').value)}
 function fill(f,w){for(var k in f)if($(k))$(k).value=f[k];wx={};w.forEach(function(x){wx[x]=1});[].forEach.call($('wx').children,function(b){b.setAttribute('aria-pressed',!!wx[b.textContent])})}
-$('share').onclick=async function(){ping('share_click');var f={};['game','weap','loc','ter','days','wt','bud','when','skill'].forEach(function(k){f[k]=$(k).value});
+$('share').onclick=async function(){ping('share_click');var f={};['game','weap','loc','ter','days','wt','bud','when','skill','truck'].forEach(function(k){f[k]=$(k).value});
  var u=location.href.split('#')[0]+'#'+btoa(unescape(encodeURIComponent(JSON.stringify({f:f,wx:Object.keys(wx)})))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),m;
  try{await navigator.clipboard.writeText(u);m='Link copied. Send it to your hunting partner.'}catch(e){m=u}$('shareMsg').textContent=m};
 try{var hh=location.hash.match(/^#([A-Za-z0-9_-]{20,})$/);if(hh){var dd=JSON.parse(decodeURIComponent(escape(atob(hh[1].replace(/-/g,'+').replace(/_/g,'/')))));fill(dd.f,dd.wx||[]);build(false)}}catch(e){}
@@ -503,6 +527,7 @@ $('ics').onclick=function(){if(!PRO||!cur)return;var p=plan();if(!p)return;var z
 $('off').onclick=function(){if(!PRO||!cur)return;var c=cur.c,cats={},tw=0,tp=0,h='';cur.items.forEach(function(i){(cats[i.cat]=cats[i.cat]||[]).push(i);tw+=i.lb;tp+=i.pr});var nm=$('kname').value||c.game+' hunt',sk='wm_'+fn(),k=0;
  h+='<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(nm)+'</title><style>body{font:16px/1.5 system-ui,sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#f3f1ea;color:#242826}h1{font-family:Georgia,serif;margin:0}h2{margin:22px 0 6px;border-bottom:2px solid #1f3a2e;font-size:18px}label{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #d8d4c6}input{width:22px;height:22px;accent-color:#1f3a2e;flex:none}.d{opacity:.5;text-decoration:line-through}small{color:#666d66}</style></head><body><h1>'+esc(nm)+'</h1><p>'+esc(c.game)+' | '+esc(c.weap)+' | '+esc(c.ter)+' | '+c.days+' day'+(c.days>1?'s':'')+(Object.keys(c.wx).length?' | '+esc(Object.keys(c.wx).join(', ')):'')+(c.loc?' | '+esc(c.loc):'')+'<br><small>About '+tw.toFixed(1)+' lb. Wildmark Field Co. Works offline. Estimates only; check rules with your state wildlife agency.</small></p>';
  Object.keys(cats).forEach(function(cat){h+='<h2>'+esc(cat)+'</h2>'+cats[cat].map(function(i){return'<label><input type="checkbox" data-i="'+(k++)+'"><span>'+esc(i.n)+(i.q>1?' x '+i.q:'')+(OWN[i.n]?' <small>(owned)</small>':'')+'<br><small>'+(i.lb*16).toFixed(0)+' oz</small></span></label>'}).join('')});
+ if(cur.truck&&cur.truck.length)h+='<h2>Truck cache (stays at the truck)</h2>'+cur.truck.map(function(i){return'<label><input type="checkbox" data-i="'+(k++)+'"><span>'+esc(i.n)+'</span></label>'}).join('');
  h+='<h2>Check-in plan</h2><p>Who knows the plan: '+esc(PL.who||'')+' '+esc(PL.ph||'')+'<br>Parking: '+esc(PL.park||'')+'<br>Turnaround time: '+esc(PL.turn||'')+'<br>Route: '+esc(PL.route||'')+'</p>';
  h+='<script>(function(){var K='+JSON.stringify(sk)+',S={};try{S=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}var a=document.querySelectorAll("input[data-i]");for(var i=0;i<a.length;i++){(function(el){var n=el.dataset.i;el.checked=!!S[n];el.parentNode.className=el.checked?"d":"";el.onchange=function(){S[n]=el.checked;el.parentNode.className=el.checked?"d":"";try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}})(a[i])}})()<\/script></body></html>';
  dl('wildmark-'+fn()+'.html','text/html',h)};
@@ -550,6 +575,7 @@ $('pkt').onclick=function(){if(!cur||!PRO)return;var c=cur.c,cats={},h='',tw=0,t
  cur.items.forEach(function(i){(cats[i.cat]=cats[i.cat]||[]).push(i);tw+=i.lb;tp+=i.pr});
  h+='<h1>'+esc($('kname').value||c.game+' hunt')+'</h1><p>'+esc(c.game)+' | '+esc(c.weap)+' | '+esc(c.ter)+' | '+c.days+' day'+(c.days>1?'s':'')+(Object.keys(c.wx).length?' | '+esc(Object.keys(c.wx).join(', ')):'')+'</p>'+($('loc').value?'<p>Location: '+esc($('loc').value)+'</p>':'')+'<p>Estimated pack weight '+tw.toFixed(1)+' lb. Estimated cost $'+Math.round(tp)+'.</p>';
  Object.keys(cats).forEach(function(k){h+='<h2>'+esc(k)+'</h2>'+cats[k].map(function(i){return'<p>&#9744; '+esc(i.n)+(i.q>1?' x '+i.q:'')+' ('+(i.lb*16).toFixed(0)+' oz)'+(OWN[i.n]?' - owned':'')+'</p>'}).join('')});
+ if(cur.truck&&cur.truck.length)h+='<h2>Truck cache (stays at the truck, not in your pack)</h2>'+cur.truck.map(function(i){return'<p>&#9744; '+esc(i.n)+'</p>'}).join('');
  var L=[['c1','License purchased'],['c2','Tags and draw results confirmed'],['c3','Season dates checked'],['c4','Hunter education card packed'],['c5','Land access checked'],['c6','Fire restrictions and road closures checked']];
  h+='<h2>Before you go</h2>'+L.map(function(x){return'<p>'+(PL[x[0]]?'&#9745;':'&#9744;')+' '+x[1]+'</p>'}).join('');
  h+='<h2>Check-in plan</h2><p>Who knows the plan: '+esc(PL.who||'')+' '+esc(PL.ph||'')+'</p><p>Parking: '+esc(PL.park||'')+'</p><p>Turnaround time: '+esc(PL.turn||'')+'</p><p>Route: '+esc(PL.route||'')+'</p>';
