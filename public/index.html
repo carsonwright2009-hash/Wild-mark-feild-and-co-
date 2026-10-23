@@ -106,6 +106,8 @@ section[id],h2[id]{scroll-margin-top:58px}
 #toTop{position:fixed;right:14px;bottom:18px;z-index:60;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--green);font-size:22px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s}#toTop.on{opacity:1;pointer-events:auto}
 :root[data-theme="dark"] #toTop{color:var(--hi)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #toTop{color:var(--hi)}}
 @media(pointer:coarse){.ownb{min-height:36px;padding:6px 12px}}
+
+.tbg{border:1px solid var(--line);border-radius:8px;margin:10px 0;background:var(--bg)}.tbg summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;min-height:48px;font-weight:600}.tbg summary::-webkit-details-marker{display:none}.tbg summary small{margin-left:auto;color:var(--mute);font-weight:400;font-size:13px}.tbg summary::after{content:"+";font-size:24px;color:var(--mute);line-height:1}.tbg[open] summary::after{content:"\2212"}.tbg .chk{margin:0;padding:10px 14px;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -598,9 +600,12 @@ $('lmatch').onclick=function(){var g=$('game').value;$('lpur').value={'Elk':'bac
  $('ltmp').value=wx.Snow||wx.Cold?'cold':wx.Hot?'hot':'mild';$('lrain').checked=!!wx.Rain;$('lsnow').checked=!!wx.Snow;$('lwind').checked=!!wx.Wind;$('lbud').value={'Budget':'1','Mid-range':'2','Premium':'3'}[$('bud').value]||'2';layer(1)};
 var TB=[['Clothes and boots',['Dry change of clothes and a warm layer','Spare socks and base layer','Spare dry boots','Camp shoes or sandals']],['Food and water',['Easy meals and snacks','Electrolyte mix','2 gallons of water','Cooler and ice (for meat)']],['Safety',['Full first-aid kit','Emergency blanket','Spare headlamp and batteries','Power bank and charge cable','Jump pack or cables and a tire inflator','Spare key and a printed copy of your trip plan']],['Pack-out',['Extra game bags','Spare pack or meat frame','Towel, wipes and trash bags']]];
 var TBK='wildmark_truck',TBS={};try{TBS=JSON.parse(localStorage.getItem(TBK)||'{}')}catch(e){}
-function tbR(){var h='',n=0;TB.forEach(function(g){h+='<p class="hint" style="margin:14px 0 2px"><b>'+esc(g[0])+'</b></p>';g[1].forEach(function(t){h+='<label class="chk"><input type="checkbox" data-t="'+esc(t)+'"'+(TBS[t]?' checked':'')+'><span>'+esc(t)+'</span></label>'})});$('tbl').innerHTML=h}
+var TBO={};
+function tbC(g){var n=0;g[1].forEach(function(t){if(TBS[t])n++});return n+' of '+g[1].length}
+function tbR(){var h='';TB.forEach(function(g,k){h+='<details class="tbg" data-k="'+k+'"'+(TBO[k]?' open':'')+'><summary><span>'+esc(g[0])+'</span><small>'+tbC(g)+'</small></summary>';g[1].forEach(function(t){h+='<label class="chk"><input type="checkbox" data-t="'+esc(t)+'"'+(TBS[t]?' checked':'')+'><span>'+esc(t)+'</span></label>'});h+='</details>'});$('tbl').innerHTML=h}
 tbR();
-$('tbl').addEventListener('change',function(e){var t=e.target.dataset.t;if(!t)return;TBS[t]=e.target.checked;try{localStorage.setItem(TBK,JSON.stringify(TBS))}catch(x){}});
+$('tbl').addEventListener('change',function(e){var t=e.target.dataset.t;if(!t)return;TBS[t]=e.target.checked;try{localStorage.setItem(TBK,JSON.stringify(TBS))}catch(x){}var d=e.target.closest('details');if(d)d.querySelector('summary small').textContent=tbC(TB[+d.dataset.k])});
+$('tbl').addEventListener('toggle',function(e){var d=e.target;if(d.dataset&&d.dataset.k!=null)TBO[d.dataset.k]=d.open},true);
 $('tbReset').onclick=function(){TBS={};try{localStorage.removeItem(TBK)}catch(x){}tbR()};
 $('tbPrint').onclick=function(){var h='<h1>Truck box checklist</h1><p>Wildmark Field Co.</p>';TB.forEach(function(g){h+='<h2>'+esc(g[0])+'</h2>'+g[1].map(function(t){return'<p>'+(TBS[t]?'&#9745;':'&#9744;')+' '+esc(t)+'</p>'}).join('')});$('packet').innerHTML=h;document.body.classList.add('pk');var done=function(){document.body.classList.remove('pk');window.removeEventListener('afterprint',done)};window.addEventListener('afterprint',done);window.print()};
 
