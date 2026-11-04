@@ -1,6 +1,7 @@
 // Reminder signup: stores an email address so the owner can send seasonal reminders. Anonymous POST.
 const SB = process.env.SUPABASE_URL;
 const SRK = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_K;
+const SRC = ['ig-bio', 'ig-post', 'ig-story', 'ig-dm', 'fb', 'fb-group', 'tiktok', 'yt', 'flyer', 'checklist', 'email', 'friend', 'dm', 'other'];
 const H = { apikey: SRK, Authorization: 'Bearer ' + SRK };
 const reply = (o, c = 200) => ({ statusCode: c, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, body: JSON.stringify(o) });
 exports.handler = async (e) => {
@@ -18,7 +19,7 @@ exports.handler = async (e) => {
     const r = await fetch(SB + '/rest/v1/reminders?on_conflict=email', {
       method: 'POST',
       headers: Object.assign({ 'Content-Type': 'application/json', Prefer: 'resolution=ignore-duplicates' }, H),
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, src: SRC.includes(String(b.src || '')) ? String(b.src) : null }),
     });
     if (!r.ok) return reply({ error: 'save_failed' }, 500);
     return reply({ ok: true });
