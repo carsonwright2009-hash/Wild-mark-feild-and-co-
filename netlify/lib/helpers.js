@@ -48,6 +48,26 @@ async function getComp(user) {
   if (!j[0]) return false;
   return !j[0].until || new Date(j[0].until).getTime() > Date.now();
 }
+// Hunt Pass: one-time purchase that unlocks Premium for 30 days.
+const PASS_PRICE = 'price_1UXxarAdh8Pe9EUXBLXoEKuy', PASS_DAYS = 30;
+async function getPass(uid) {
+  const r = await fetch(SB + '/rest/v1/passes?user_id=eq.' + encodeURIComponent(uid) + '&expires_at=gt.' + encodeURIComponent(new Date().toISOString()) + '&select=expires_at&order=expires_at.desc&limit=1', { headers: srk });
+  if (!r.ok) throw new Error('db read failed');
+  const j = await r.json();
+  return j[0] ? j[0].expires_at : null;
+}
+// Stores a paid Hunt Pass once per checkout session (session_id is the key, so repeats do nothing).
+async function savePass(session, uid) {
+  const exp = new Date((session.created + PASS_DAYS * 86400) * 1000).toISOString();
+  const r = await fetch(SB + '/rest/v1/passes?on_conflict=session_id', {
+    method: 'POST',
+    headers: Object.assign({ 'Content-Type': 'application/json', Prefer: 'resolution=ignore-duplicates' }, srk),
+    body: JSON.stringify({ session_id: session.id, user_id: uid, expires_at: exp }),
+  });
+  if (!r.ok) throw new Error('db write failed');
+  return exp;
+}
+const isPassSession = (s) => !!s && s.mode === 'payment' && s.payment_status === 'paid' && !!(s.line_items && s.line_items.data && s.line_items.data.some((l) => l.price && l.price.id === PASS_PRICE));
 const reply = (o, c = 200) => ({ statusCode: c, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, body: JSON.stringify(o) });
 const isLive = (s) => !!s && (s.status === 'active' || s.status === 'trialing');
-module.exports = { stripe, getUser, getSub, saveSub, getComp, reply, isLive };
+module.exports = { stripe, getUser, getSub, saveSub, getComp, getPass, savePass, isPassSession, PASS_PRICE, reply, isLive };

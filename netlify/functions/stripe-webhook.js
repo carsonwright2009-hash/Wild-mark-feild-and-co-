@@ -1,7 +1,7 @@
 // Stripe calls this after a checkout completes, so Premium turns on even if the
 // buyer never returns to the site. The signature proves the call is from Stripe.
 const crypto = require('crypto');
-const { stripe, saveSub, reply, isLive } = require('../lib/helpers');
+const { stripe, saveSub, savePass, isPassSession, reply, isLive } = require('../lib/helpers');
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -31,6 +31,11 @@ exports.handler = async (e) => {
         // Double-check with Stripe that the subscription is really active before granting Premium.
         const sub = await stripe('/subscriptions/' + encodeURIComponent(s.subscription));
         if (isLive(sub)) await saveSub({ user_id: uid, stripe_customer_id: s.customer, stripe_subscription_id: s.subscription, updated_at: new Date().toISOString() });
+      }
+      if (s && s.mode === 'payment' && s.payment_status === 'paid' && UUID.test(uid || '')) {
+        // Hunt Pass: re-read the session from Stripe to confirm the price before granting 30 days.
+        const full = await stripe('/checkout/sessions/' + encodeURIComponent(s.id) + '?expand[]=line_items');
+        if (isPassSession(full)) await savePass(full, uid);
       }
     }
     // Cancellations need no action here: /status checks the subscription with Stripe on every page load.
