@@ -268,6 +268,7 @@ section[id],h2[id]{scroll-margin-top:58px}
 <section id="about"><details class="fold"><summary><h2>About Wildmark Field Co.</h2></summary><div class="card"><p style="margin:0">Wildmark builds gear lists for hunters who want to carry what they need and nothing they do not. Tell us the hunt and we size the kit to the game, the weather and your pack. Hunt prepared.</p></div></details></section>
 <p class="fine">Weights and prices are estimates. Always check current regulations, seasons, license and tag requirements for your unit before you go. Weather and terrain change fast: tell someone your plan.</p>
 <p class="fine"><a href="new-hunter.html">New-hunter guide</a> &nbsp; <a href="privacy.html">Privacy policy</a> &nbsp; <a href="terms.html">Terms of service</a> &nbsp; <a href="mailto:carsonwright2009@gmail.com">Contact</a> &nbsp; Wildmark Field Co.</p>
+<p class="fine">As an Amazon Associate, Wildmark Field Co. earns from qualifying purchases.</p>
 <p class="fine">Works offline after your first visit, so you can check your kit without cell service.</p>
 </main>
 <button type="button" id="toTop" aria-label="Back to top">↑</button>
@@ -451,12 +452,12 @@ Clothing:[['Banded or Sitka waders','Insulated, tough waders for cold water and 
 Camp:[['Mystery Ranch hunting packs','Frame packs built to haul meat as well as gear.','mr,sw,bc','Backcountry|Overnight|Base camp'],['Big Agnes Copper Spur tent','Light freestanding shelter for two or more.','rei,bc,am','Backcountry|Overnight|Base camp'],['Therm-a-Rest NeoAir sleeping pad','Light, warm and packable.','rei,bc,am','Backcountry|Overnight|Base camp'],['MSR PocketRocket stove','Small canister stove for boiling water fast.','rei,am','Backcountry|Overnight|Base camp']],
 Water:[['Sawyer Squeeze water filter','Light filter that works with standard bottles and bladders.','rei,am','Backcountry|Overnight'],['Nalgene wide-mouth bottles','Tough, easy to fill from streams.','rei,am']],
 Food:[['Mountain House freeze-dried meals','Add hot water, eat from the pouch.','rei,sw,am'],['Peak Refuel meals','High-calorie freeze-dried dinners.','rei,am']]};
-function rec(k){var c=cur.c,s=[c.game,c.weap,c.ter,c.trip,Object.keys(c.wx).join(' ')].join(' '),h='';
+function rec(k){var AMZ=0,c=cur.c,s=[c.game,c.weap,c.ter,c.trip,Object.keys(c.wx).join(' ')].join(' '),h='';
  (REC[k]||[]).forEach(function(r){if(r[3]&&!new RegExp(r[3]).test(s))return;
-  var l=r[2]?r[2].split(',').map(function(x){return '<a href="'+ST[x][1]+'" target="_blank" rel="noopener noreferrer">'+ST[x][0]+'</a>'}).join(''):'';
+  var l=r[2]?r[2].split(',').map(function(x){if(x=='am'){AMZ=1;return '<a href="https://www.amazon.com/s?k='+encodeURIComponent(r[0])+'&tag=wildmarkfield-20" target="_blank" rel="sponsored noopener noreferrer">Amazon</a>'}return '<a href="'+ST[x][1]+'" target="_blank" rel="noopener noreferrer">'+ST[x][0]+'</a>'}).join(''):'';
   h+='<div class="p"><b>'+r[0]+'</b><span>'+r[1]+'</span>'+(l?'<span class="w">Where to get it: '+l+'</span>':'')+'</div>'});
  items().forEach(function(it){if(it[1]==k&&it[7]&&it[6])h='<div class="p"><b>'+esc(it[0])+' (Wildmark pick)</b><span class="w">Where to get it: <a href="'+esc(it[6])+'" target="_blank" rel="noopener noreferrer">Buy</a></span></div>'+h});
- return (h||'<div class="p"><span>No picks for this category yet.</span></div>')+'<p class="f">Suggestions for your hunt, not endorsements. Check current price, fit and availability with the seller.</p>'}
+ return (h||'<div class="p"><span>No picks for this category yet.</span></div>')+'<p class="f">Suggestions for your hunt, not endorsements. Check current price, fit and availability with the seller.'+(AMZ?' As an Amazon Associate, Wildmark Field Co. earns from qualifying purchases.':'')+'</p>'}
 $('list').addEventListener('click',function(e){var b=e.target.closest('.gh');if(!b)return;var k=b.dataset.c;OPEN[k]=!OPEN[k];b.setAttribute('aria-expanded',OPEN[k]);b.parentNode.nextElementSibling.hidden=!OPEN[k]});
 $('list').addEventListener('click',function(e){var t=e.target;if(!t.dataset)return;
  if(t.dataset.e!=null){e.preventDefault();var row=t.closest('.row'),nx=row.nextElementSibling;if(nx&&nx.classList.contains('ed')){nx.remove();return}
