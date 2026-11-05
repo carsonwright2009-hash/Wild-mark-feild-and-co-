@@ -48,8 +48,8 @@ async function getComp(user) {
   if (!j[0]) return false;
   return !j[0].until || new Date(j[0].until).getTime() > Date.now();
 }
-// Hunt Pass: one-time purchase that unlocks Premium for 30 days.
-const PASS_PRICE = 'price_1UXxarAdh8Pe9EUXBLXoEKuy', PASS_DAYS = 30;
+// Hunt Pass: one-time purchase that unlocks Premium for 7 days.
+const PASS_PRICE = 'price_1UXxarAdh8Pe9EUXBLXoEKuy', PASS_DAYS = 7;
 async function getPass(uid) {
   const r = await fetch(SB + '/rest/v1/passes?user_id=eq.' + encodeURIComponent(uid) + '&expires_at=gt.' + encodeURIComponent(new Date().toISOString()) + '&select=expires_at&order=expires_at.desc&limit=1', { headers: srk });
   if (!r.ok) throw new Error('db read failed');

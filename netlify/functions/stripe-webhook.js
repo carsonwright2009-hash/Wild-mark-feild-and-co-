@@ -33,7 +33,7 @@ exports.handler = async (e) => {
         if (isLive(sub)) await saveSub({ user_id: uid, stripe_customer_id: s.customer, stripe_subscription_id: s.subscription, updated_at: new Date().toISOString() });
       }
       if (s && s.mode === 'payment' && s.payment_status === 'paid' && UUID.test(uid || '')) {
-        // Hunt Pass: re-read the session from Stripe to confirm the price before granting 30 days.
+        // Hunt Pass: re-read the session from Stripe to confirm the price before granting 7 days.
         const full = await stripe('/checkout/sessions/' + encodeURIComponent(s.id) + '?expand[]=line_items');
         if (isPassSession(full)) await savePass(full, uid);
       }
