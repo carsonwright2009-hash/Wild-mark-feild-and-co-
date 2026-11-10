@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Free ballistic calculator for hunters | Wildmark Field Co.</title>
+<meta name="description" content="Free hunting ballistic calculator. Enter your bullet, velocity and zero to get bullet drop, wind drift, velocity and energy at every distance, in inches, MOA and mils.">
+<link rel="canonical" href="https://wildmarkfieldco.com/ballistics/"><link rel="icon" href="/icon.svg" type="image/svg+xml"><meta name="theme-color" content="#1f3a2e">
+<style>:root{--bg:#f3f1ea;--surface:#fbfaf6;--ink:#242826;--mute:#666d66;--green:#1f3a2e;--line:#d8d4c6;--link:#1f3a2e;--warn:#7a5a1e;--warnbg:#f6ecd5}
+@media(prefers-color-scheme:dark){:root{--bg:#171a18;--surface:#202421;--ink:#ece9df;--mute:#a2a89f;--green:#3f6b55;--line:#363c37;--link:#7fb398;--warn:#e3c98a;--warnbg:#2c261a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}main{max-width:760px;margin:0 auto;padding:22px 16px 56px}
+h1,h2{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;line-height:1.2}h1{font-size:clamp(26px,7vw,36px);margin:.3em 0}h2{font-size:21px;margin:1.4em 0 .4em}a{color:var(--link)}
+.lead{color:var(--mute);margin:0 0 14px}.crumb{font-size:14px}.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:12px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}.grid label{font-size:13px;color:var(--mute);display:block;margin-bottom:3px}
+input,select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.btn{display:block;width:100%;background:var(--green);color:#f3f1ea;border:0;border-radius:6px;padding:13px;font:inherit;font-weight:600;margin-top:14px;cursor:pointer}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:12px 14px;font-size:14.5px;margin:12px 0}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;font-size:15px;min-width:420px}th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left;font-weight:600}th{font-size:12.5px;color:var(--mute);font-weight:600}
+.seg{display:flex;gap:8px;margin:10px 0 4px}.seg button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px;font:inherit;font-size:14px;cursor:pointer}.seg button.on{background:var(--green);color:#f3f1ea;border-color:var(--green)}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.sum div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 6px;text-align:center}.sum b{display:block;font:700 20px Georgia,serif;color:var(--green)}.sum span{font-size:12px;color:var(--mute)}
+.cta{display:inline-block;background:var(--green);color:#f3f1ea;text-decoration:none;font-weight:600;border-radius:6px;padding:13px 18px;margin:8px 0}.fine{font-size:13px;color:var(--mute);margin-top:26px}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}</style></head><body><main>
+<p class="crumb"><a href="/">Wildmark Field Co.</a></p>
+<h1>Free ballistic calculator</h1>
+<p class="lead">Bullet drop, wind drift, speed and energy at every distance. Enter what is printed on your ammo box and your zero.</p>
+<div class="warn"><b>Estimates only.</b> This is a calculator, not a substitute for shooting. Always confirm your real drops at the range with your own rifle and ammo, and only take shots you have verified and are sure you can make ethically.</div>
+<form class="card" id="f" onsubmit="return go(event)"><div class="grid">
+<div><label for="wt">Bullet weight (grains)</label><input id="wt" type="number" step="any" value="168" inputmode="decimal"></div>
+<div><label for="bc">Ballistic coefficient (BC)</label><input id="bc" type="number" step="any" value="0.462" inputmode="decimal"></div>
+<div><label for="tab">BC type</label><select id="tab"><option value="G1">G1 (most ammo boxes)</option><option value="G7">G7 (long-range bullets)</option></select></div>
+<div><label for="mv">Muzzle velocity (fps)</label><input id="mv" type="number" step="any" value="2650" inputmode="decimal"></div>
+<div><label for="zero">Zero distance (yards)</label><input id="zero" type="number" step="any" value="100" inputmode="decimal"></div>
+<div><label for="sh">Scope height over bore (in)</label><input id="sh" type="number" step="any" value="1.5" inputmode="decimal"></div>
+<div><label for="wind">Wind speed (mph)</label><input id="wind" type="number" step="any" value="10" inputmode="decimal"></div>
+<div><label for="wangle">Wind direction</label><select id="wangle"><option value="90">Full value (from the side)</option><option value="45">Half value (angled)</option><option value="0">None (head or tail wind)</option></select></div>
+<div><label for="temp">Temperature (&deg;F)</label><input id="temp" type="number" step="any" value="59" inputmode="decimal"></div>
+<div><label for="alt">Elevation (feet)</label><input id="alt" type="number" step="any" value="0" inputmode="decimal"></div>
+<div><label for="step">Distance step (yards)</label><select id="step"><option>25</option><option selected>50</option><option>100</option></select></div>
+<div><label for="max">Max distance (yards)</label><select id="max"><option>300</option><option>400</option><option selected>600</option><option>800</option><option>1000</option></select></div>
+</div><button class="btn" type="submit">Calculate</button></form>
+<div id="out" hidden>
+<div class="sum" id="sum"></div>
+<div class="seg" id="seg"><button type="button" data-u="in" class="on">Inches</button><button type="button" data-u="moa">MOA</button><button type="button" data-u="mil">Mils</button></div>
+<div class="card"><div class="tw"><table><thead><tr><th>Yards</th><th>Drop</th><th>Wind</th><th>Speed (fps)</th><th>Energy (ft-lb)</th><th>Time (s)</th></tr></thead><tbody id="tb"></tbody></table></div>
+<p class="fine" style="margin:10px 0 0">Inches: negative drop means the bullet lands below your aim point. MOA and mils: the arrow shows which way to hold or dial. Wind is how far the bullet drifts downwind, so hold into the wind.</p></div>
+<div class="card" style="text-align:center"><b>Packing for the hunt too?</b><br><a class="cta" href="/?src=ballistics">Build a free gear list</a></div>
+</div>
+<h2>How to use it</h2>
+<p>Your BC and bullet weight are on the ammo box or the bullet maker's website. Get your real muzzle velocity from a chronograph if you can, because the number on the box is often higher than what your barrel actually shoots. Set the zero to the distance you actually sighted in at.</p>
+<p>The calculator uses a standard point-mass model with the G1 and G7 drag curves. Commercial apps use more detailed bullet data, so results can differ slightly, especially past 500 yards or with unusual bullets.</p>
+<p class="fine"><a href="/guides/">Gear list guides</a> &nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp; <a href="/terms.html">Terms of service</a> &nbsp; Wildmark Field Co.</p>
+</main>
+<script>
+var DRAG={G1:[[0.0,0.2629],[0.05,0.2558],[0.1,0.2487],[0.15,0.2413],[0.2,0.2344],[0.25,0.2278],[0.3,0.2214],[0.35,0.2155],[0.4,0.2104],[0.45,0.2061],[0.5,0.2032],[0.55,0.202],[0.6,0.2034],[0.7,0.2165],[0.725,0.223],[0.75,0.2313],[0.775,0.2417],[0.8,0.2546],[0.825,0.2706],[0.85,0.2901],[0.875,0.3136],[0.9,0.3415],[0.925,0.3734],[0.95,0.4084],[0.975,0.4448],[1.0,0.4805],[1.025,0.5136],[1.05,0.5427],[1.075,0.5677],[1.1,0.5883],[1.125,0.6053],[1.15,0.6191],[1.2,0.6393],[1.25,0.6518],[1.3,0.6589],[1.35,0.6621],[1.4,0.6625],[1.45,0.6607],[1.5,0.6573],[1.55,0.6528],[1.6,0.6474],[1.65,0.6413],[1.7,0.6347],[1.75,0.628],[1.8,0.621],[1.85,0.6141],[1.9,0.6072],[1.95,0.6003],[2.0,0.5934],[2.05,0.5867],[2.1,0.5804],[2.15,0.5743],[2.2,0.5685],[2.25,0.563],[2.3,0.5577],[2.35,0.5527],[2.4,0.5481],[2.45,0.5438],[2.5,0.5397],[2.6,0.5325],[2.7,0.5264],[2.8,0.5211],[2.9,0.5168],[3.0,0.5133],[3.1,0.5105],[3.2,0.5084],[3.3,0.5067],[3.4,0.5054],[3.5,0.504],[3.6,0.503],[3.7,0.5022],[3.8,0.5016],[3.9,0.501],[4.0,0.5006],[4.2,0.4998],[4.4,0.4995],[4.6,0.4992],[4.8,0.499],[5.0,0.4988]],G7:[[0.0,0.1198],[0.05,0.1197],[0.1,0.1196],[0.15,0.1194],[0.2,0.1193],[0.25,0.1194],[0.3,0.1194],[0.35,0.1194],[0.4,0.1193],[0.45,0.1193],[0.5,0.1194],[0.55,0.1193],[0.6,0.1194],[0.65,0.1197],[0.7,0.1202],[0.725,0.1207],[0.75,0.1215],[0.775,0.1226],[0.8,0.1242],[0.825,0.1266],[0.85,0.1306],[0.875,0.1368],[0.9,0.1464],[0.925,0.166],[0.95,0.2054],[0.975,0.2993],[1.0,0.3803],[1.025,0.4015],[1.05,0.4043],[1.075,0.4034],[1.1,0.4014],[1.125,0.3987],[1.15,0.3955],[1.2,0.3884],[1.25,0.381],[1.3,0.3732],[1.35,0.3657],[1.4,0.358],[1.5,0.344],[1.55,0.3376],[1.6,0.3315],[1.65,0.326],[1.7,0.3209],[1.75,0.316],[1.8,0.3117],[1.85,0.3078],[1.9,0.3042],[1.95,0.301],[2.0,0.298],[2.05,0.2951],[2.1,0.2922],[2.15,0.2892],[2.2,0.2864],[2.25,0.2835],[2.3,0.2807],[2.35,0.2779],[2.4,0.2752],[2.45,0.2725],[2.5,0.2697],[2.55,0.267],[2.6,0.2643],[2.65,0.2615],[2.7,0.2588],[2.75,0.2561],[2.8,0.2533],[2.85,0.2506],[2.9,0.2479],[2.95,0.2451],[3.0,0.2424],[3.1,0.2368],[3.2,0.2313],[3.3,0.2258],[3.4,0.2205],[3.5,0.2154],[3.6,0.2106],[3.7,0.206],[3.8,0.2017],[3.9,0.1975],[4.0,0.1935],[4.2,0.1861],[4.4,0.1793],[4.6,0.173],[4.8,0.1672],[5.0,0.1618]]};
+function cd(tab,m){var T=DRAG[tab];if(m<=T[0][0])return T[0][1];for(var i=1;i<T.length;i++){if(m<=T[i][0]){var a=T[i-1],b=T[i];return a[1]+(b[1]-a[1])*(m-a[0])/(b[0]-a[0])}}return T[T.length-1][1]}
+function atmo(tF,alt){var R=tF+459.67,p=Math.pow(1-6.8755856e-6*alt,5.2558797);var rho=p*(518.67/R);return{rho:rho,ss:49.0223*Math.sqrt(R)}}
+/* point-mass trajectory (RK4). samples every o.step yards, linearly interpolated. y is height above line of sight (ft) */
+function fly(o,ang,maxYd){
+  var A=atmo(o.temp,o.alt),K=2.0857e-4*A.rho/o.bc,vx=o.mv*Math.cos(ang),vy=o.mv*Math.sin(ang),x=0,y=0,t=0,dt=0.0005,g=32.174,out=[],nextX=0,sh=o.sh/12,lim=maxYd*3;
+  function acc(vx,vy){var v=Math.sqrt(vx*vx+vy*vy),d=K*cd(o.tab,v/A.ss)*v;return[-d*vx,-d*vy-g]}
+  out.push({x:0,y:-sh,t:0,v:o.mv});nextX=o.step*3;
+  while(x<lim&&vx>60){
+    var a1=acc(vx,vy),vx2=vx+a1[0]*dt/2,vy2=vy+a1[1]*dt/2,a2=acc(vx2,vy2),vx3=vx+a2[0]*dt/2,vy3=vy+a2[1]*dt/2,a3=acc(vx3,vy3),vx4=vx+a3[0]*dt,vy4=vy+a3[1]*dt,a4=acc(vx4,vy4);
+    var nvx=vx+dt/6*(a1[0]+2*a2[0]+2*a3[0]+a4[0]),nvy=vy+dt/6*(a1[1]+2*a2[1]+2*a3[1]+a4[1]);
+    var nx=x+dt*(vx+nvx)/2,ny=y+dt*(vy+nvy)/2;
+    while(nx>=nextX-1e-9&&nextX<=lim+1e-9){var f=(nextX-x)/(nx-x);out.push({x:nextX,y:y+(ny-y)*f-sh,t:t+dt*f,v:Math.sqrt(Math.pow(vx+(nvx-vx)*f,2)+Math.pow(vy+(nvy-vy)*f,2))});nextX+=o.step*3}
+    x=nx;y=ny;vx=nvx;vy=nvy;t+=dt;
+  }
+  return out;
+}
+function yAt(o,ang){var r=fly({tab:o.tab,bc:o.bc,mv:o.mv,sh:o.sh,temp:o.temp,alt:o.alt,step:o.zero},ang,o.zero),l=r[r.length-1];return l&&l.x>=o.zero*3-1e-6?l.y:NaN}
+function solveZero(o){
+  var lo=-0.02,hi=0.05,f=function(a){return yAt(o,a)};
+  for(var i=0;i<40;i++){var m=(lo+hi)/2;if(f(m)<0)lo=m;else hi=m}
+  return(lo+hi)/2;
+}
+function calc(o){
+  var ang=solveZero(o),tr=fly({tab:o.tab,bc:o.bc,mv:o.mv,sh:o.sh,temp:o.temp,alt:o.alt,step:o.step},ang,o.max),rows=[],Vw=o.wind*Math.sin(o.wangle*Math.PI/180)*1.46667;
+  for(var i=0;i<tr.length;i++){
+    var p=tr[i],yd=Math.round(p.x/3),drop=p.y*12,drift=yd?Vw*(p.t-p.x/(o.mv*Math.cos(ang)))*12:0;
+    rows.push({yd:yd,drop:drop,moa:yd?-drop/(yd*0.010472):0,mil:yd?-drop/(yd*0.036):0,drift:drift,dmoa:yd?drift/(yd*0.010472):0,dmil:yd?drift/(yd*0.036):0,v:p.v,e:o.wt?o.wt*p.v*p.v/450240:null,t:p.t});
+  }
+  return rows;
+}
+
+var U='in',rows=[],pinged=0;
+function ping(n){try{var b=JSON.stringify({name:n});if(navigator.sendBeacon&&navigator.sendBeacon('/.netlify/functions/event',new Blob([b],{type:'application/json'})))return;fetch('/.netlify/functions/event',{method:'POST',headers:{'Content-Type':'application/json'},body:b,keepalive:true}).catch(function(){})}catch(e){}}
+var IDS=['wt','bc','tab','mv','zero','sh','wind','wangle','temp','alt','step','max'];
+try{var sv=JSON.parse(localStorage.getItem('wm_ballistics')||'null');if(sv)IDS.forEach(function(k){if(sv[k]!=null&&document.getElementById(k))document.getElementById(k).value=sv[k]})}catch(e){}
+function val(k){return parseFloat(document.getElementById(k).value)}
+function render(){
+  var h='',dec=U=='in'?1:U=='moa'?1:2;
+  rows.forEach(function(r){
+    var d=U=='in'?r.drop:U=='moa'?r.moa:r.mil,w=U=='in'?r.drift:U=='moa'?r.dmoa:r.dmil,dc=!r.yd?'-':U=='in'?d.toFixed(1):Math.abs(d)<0.05?'0':(d>0?'&uarr; ':'&darr; ')+Math.abs(d).toFixed(dec);
+    h+='<tr><td>'+r.yd+'</td><td>'+dc+'</td><td>'+(r.yd?w.toFixed(dec):'-')+'</td><td>'+Math.round(r.v)+'</td><td>'+(r.e==null?'-':Math.round(r.e))+'</td><td>'+r.t.toFixed(2)+'</td></tr>';
+  });
+  document.getElementById('tb').innerHTML=h;
+}
+function go(e){
+  e.preventDefault();var o={},bad=0;
+  IDS.forEach(function(k){o[k]=k=='tab'?document.getElementById(k).value:val(k)});
+  if(!(o.bc>0.05&&o.bc<1.2&&o.mv>400&&o.mv<4500&&o.zero>=10&&o.zero<=600&&o.sh>=0&&o.sh<=5&&o.wt>0)){alert('Check your numbers: BC is usually between 0.2 and 0.9, velocity in feet per second, zero between 10 and 600 yards.');return false}
+  if(isNaN(o.wind))o.wind=0;if(isNaN(o.temp))o.temp=59;if(isNaN(o.alt))o.alt=0;
+  try{localStorage.setItem('wm_ballistics',JSON.stringify(o))}catch(x){}
+  rows=calc({tab:o.tab,bc:o.bc,mv:o.mv,zero:o.zero,sh:o.sh,wind:o.wind,wangle:o.wangle,wt:o.wt,temp:o.temp,alt:o.alt,step:o.step,max:o.max});
+  var last=rows[rows.length-1];
+  document.getElementById('sum').innerHTML='<div><b>'+Math.round(last.v)+'</b><span>fps at '+last.yd+' yd</span></div><div><b>'+Math.round(last.e)+'</b><span>ft-lb at '+last.yd+' yd</span></div><div><b>'+(-last.drop).toFixed(1)+'"</b><span>drop at '+last.yd+' yd</span></div>';
+  document.getElementById('out').hidden=false;render();
+  if(!pinged){pinged=1;ping('ballistics_calc')}
+  document.getElementById('out').scrollIntoView({behavior:'smooth'});
+  return false;
+}
+document.getElementById('seg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;U=b.dataset.u;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});render()});
+</script></body></html>

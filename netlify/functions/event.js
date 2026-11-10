@@ -2,8 +2,8 @@
 // Stores no IP address, cookie, email or user id.
 const SB = process.env.SUPABASE_URL;
 const SRK = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_K;
-const ALLOWED = ['view', 'kit_built', 'template_used', 'premium_click', 'signin_start', 'share_click', 'guide_view', 'layer_used', 'plan_m', 'plan_y', 'plan_p', 'reminder_signup', 'nudge_click', 'amazon_click'];
-const SRC = ['ig-bio', 'ig-post', 'ig-story', 'ig-dm', 'fb', 'fb-group', 'tiktok', 'yt', 'flyer', 'checklist', 'email', 'friend', 'dm', 'guide', 'other'];
+const ALLOWED = ['view', 'kit_built', 'template_used', 'premium_click', 'signin_start', 'share_click', 'guide_view', 'layer_used', 'plan_m', 'plan_y', 'plan_p', 'reminder_signup', 'nudge_click', 'amazon_click', 'ballistics_calc'];
+const SRC = ['ig-bio', 'ig-post', 'ig-story', 'ig-dm', 'fb', 'fb-group', 'tiktok', 'yt', 'flyer', 'checklist', 'email', 'friend', 'dm', 'guide', 'ballistics', 'other'];
 const done = (c) => ({ statusCode: c, headers: { 'Cache-Control': 'no-store' }, body: '' });
 
 exports.handler = async (e) => {
