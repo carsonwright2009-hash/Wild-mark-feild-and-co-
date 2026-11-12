@@ -14,7 +14,9 @@ input,select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);b
 .seg{display:flex;gap:8px;margin:10px 0 4px}.seg button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px;font:inherit;font-size:14px;cursor:pointer}.seg button.on{background:var(--green);color:#f3f1ea;border-color:var(--green)}
 .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.sum div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 6px;text-align:center}.sum b{display:block;font:700 20px Georgia,serif;color:var(--green)}.sum span{font-size:12px;color:var(--mute)}
 .cta{display:inline-block;background:var(--green);color:#f3f1ea;text-decoration:none;font-weight:600;border-radius:6px;padding:13px 18px;margin:8px 0}.fine{font-size:13px;color:var(--mute);margin-top:26px}
-@media(max-width:380px){.grid{grid-template-columns:1fr}}</style></head><body><main>
+.snav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}.snr{max-width:760px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;padding:0 10px;scrollbar-width:none}.snr::-webkit-scrollbar{display:none}.snr a{font-size:14px;font-weight:600;color:var(--link);text-decoration:none;padding:14px 9px;white-space:nowrap;min-height:44px}.snr a.on{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}@media(max-width:380px){.grid{grid-template-columns:1fr}}</style></head><body>
+<nav class="snav" aria-label="Page sections"><div class="snr"><a href="/#build">Build</a><a href="/#truckbox">Truck box</a><a href="/#layer">Layering</a><a href="/#pricing">Premium</a><a href="/#library">Gear</a><a href="/ballistics/" class="on" aria-current="page">Ballistics</a></div></nav>
+<main>
 <p class="crumb"><a href="/">Wildmark Field Co.</a></p>
 <h1>Free ballistic calculator</h1>
 <p class="lead">Bullet drop, wind drift, speed and energy at every distance. Enter what is printed on your ammo box and your zero.</p>
@@ -78,6 +80,7 @@ function calc(o){
   return rows;
 }
 
+try{var cur=document.querySelector('.snr a.on'),bar=cur.parentNode;bar.scrollLeft=cur.offsetLeft-(bar.clientWidth-cur.offsetWidth)/2}catch(e){}
 var U='in',rows=[],pinged=0;
 function ping(n){try{var b=JSON.stringify({name:n});if(navigator.sendBeacon&&navigator.sendBeacon('/.netlify/functions/event',new Blob([b],{type:'application/json'})))return;fetch('/.netlify/functions/event',{method:'POST',headers:{'Content-Type':'application/json'},body:b,keepalive:true}).catch(function(){})}catch(e){}}
 var IDS=['wt','bc','tab','mv','zero','sh','wind','wangle','temp','alt','step','max'];
