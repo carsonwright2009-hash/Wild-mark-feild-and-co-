@@ -14,7 +14,7 @@ input,select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);b
 .seg{display:flex;gap:8px;margin:10px 0 4px}.seg button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px;font:inherit;font-size:14px;cursor:pointer}.seg button.on{background:var(--green);color:#f3f1ea;border-color:var(--green)}
 .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.sum div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 6px;text-align:center}.sum b{display:block;font:700 20px Georgia,serif;color:var(--green)}.sum span{font-size:12px;color:var(--mute)}
 .cta{display:inline-block;background:var(--green);color:#f3f1ea;text-decoration:none;font-weight:600;border-radius:6px;padding:13px 18px;margin:8px 0}.fine{font-size:13px;color:var(--mute);margin-top:26px}
-.snav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}.snr{max-width:760px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;padding:0 10px;scrollbar-width:none}.snr::-webkit-scrollbar{display:none}.snr a{font-size:14px;font-weight:600;color:var(--link);text-decoration:none;padding:14px 9px;white-space:nowrap;min-height:44px}.snr a.on{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}@media(max-width:380px){.grid{grid-template-columns:1fr}}</style></head><body>
+.snav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}.snr{max-width:760px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;padding:0 10px;scrollbar-width:none}.snr::-webkit-scrollbar{display:none}.snr a{font-size:14px;font-weight:600;color:var(--link);text-decoration:none;padding:14px 9px;white-space:nowrap;min-height:44px}.snr a.on{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}.lrow{display:flex;gap:8px;align-items:center;border-top:1px solid var(--line);padding:9px 0}.lrow button.use{flex:1;text-align:left;background:none;border:0;color:var(--ink);font:inherit;cursor:pointer;padding:6px 0}.lrow button.use small{display:block;color:var(--mute);font-size:13px}.lrow button.del{background:none;border:1px solid var(--line);color:var(--mute);border-radius:6px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}.lsave{display:flex;gap:8px;margin:8px 0}.lsave input{flex:1}.lsave button{background:var(--green);color:#f3f1ea;border:0;border-radius:6px;padding:0 16px;font:inherit;font-weight:600;cursor:pointer}.lnote{font-size:14px;color:var(--mute);margin:6px 0}@media(max-width:380px){.grid{grid-template-columns:1fr}}</style></head><body>
 <nav class="snav" aria-label="Page sections"><div class="snr"><a href="/#build">Build</a><a href="/#truckbox">Truck box</a><a href="/#layer">Layering</a><a href="/#pricing">Premium</a><a href="/#library">Gear</a><a href="/ballistics/" class="on" aria-current="page">Ballistics</a></div></nav>
 <main>
 <p class="crumb"><a href="/">Wildmark Field Co.</a></p>
@@ -35,6 +35,7 @@ input,select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);b
 <div><label for="step">Distance step (yards)</label><select id="step"><option>25</option><option selected>50</option><option>100</option></select></div>
 <div><label for="max">Max distance (yards)</label><select id="max"><option>300</option><option>400</option><option selected>600</option><option>800</option><option>1000</option></select></div>
 </div><button class="btn" type="submit">Calculate</button></form>
+<div class="card" id="loads"><b>Saved loads</b><div id="lb" style="margin-top:6px"></div></div>
 <div id="out" hidden>
 <div class="sum" id="sum"></div>
 <div class="seg" id="seg"><button type="button" data-u="in" class="on">Inches</button><button type="button" data-u="moa">MOA</button><button type="button" data-u="mil">Mils</button></div>
@@ -47,6 +48,7 @@ input,select{width:100%;font:inherit;padding:10px;border:1px solid var(--line);b
 <p>The calculator uses a standard point-mass model with the G1 and G7 drag curves. Commercial apps use more detailed bullet data, so results can differ slightly, especially past 500 yards or with unusual bullets.</p>
 <p class="fine"><a href="/guides/">Gear list guides</a> &nbsp; <a href="/privacy.html">Privacy policy</a> &nbsp; <a href="/terms.html">Terms of service</a> &nbsp; Wildmark Field Co.</p>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 var DRAG={G1:[[0.0,0.2629],[0.05,0.2558],[0.1,0.2487],[0.15,0.2413],[0.2,0.2344],[0.25,0.2278],[0.3,0.2214],[0.35,0.2155],[0.4,0.2104],[0.45,0.2061],[0.5,0.2032],[0.55,0.202],[0.6,0.2034],[0.7,0.2165],[0.725,0.223],[0.75,0.2313],[0.775,0.2417],[0.8,0.2546],[0.825,0.2706],[0.85,0.2901],[0.875,0.3136],[0.9,0.3415],[0.925,0.3734],[0.95,0.4084],[0.975,0.4448],[1.0,0.4805],[1.025,0.5136],[1.05,0.5427],[1.075,0.5677],[1.1,0.5883],[1.125,0.6053],[1.15,0.6191],[1.2,0.6393],[1.25,0.6518],[1.3,0.6589],[1.35,0.6621],[1.4,0.6625],[1.45,0.6607],[1.5,0.6573],[1.55,0.6528],[1.6,0.6474],[1.65,0.6413],[1.7,0.6347],[1.75,0.628],[1.8,0.621],[1.85,0.6141],[1.9,0.6072],[1.95,0.6003],[2.0,0.5934],[2.05,0.5867],[2.1,0.5804],[2.15,0.5743],[2.2,0.5685],[2.25,0.563],[2.3,0.5577],[2.35,0.5527],[2.4,0.5481],[2.45,0.5438],[2.5,0.5397],[2.6,0.5325],[2.7,0.5264],[2.8,0.5211],[2.9,0.5168],[3.0,0.5133],[3.1,0.5105],[3.2,0.5084],[3.3,0.5067],[3.4,0.5054],[3.5,0.504],[3.6,0.503],[3.7,0.5022],[3.8,0.5016],[3.9,0.501],[4.0,0.5006],[4.2,0.4998],[4.4,0.4995],[4.6,0.4992],[4.8,0.499],[5.0,0.4988]],G7:[[0.0,0.1198],[0.05,0.1197],[0.1,0.1196],[0.15,0.1194],[0.2,0.1193],[0.25,0.1194],[0.3,0.1194],[0.35,0.1194],[0.4,0.1193],[0.45,0.1193],[0.5,0.1194],[0.55,0.1193],[0.6,0.1194],[0.65,0.1197],[0.7,0.1202],[0.725,0.1207],[0.75,0.1215],[0.775,0.1226],[0.8,0.1242],[0.825,0.1266],[0.85,0.1306],[0.875,0.1368],[0.9,0.1464],[0.925,0.166],[0.95,0.2054],[0.975,0.2993],[1.0,0.3803],[1.025,0.4015],[1.05,0.4043],[1.075,0.4034],[1.1,0.4014],[1.125,0.3987],[1.15,0.3955],[1.2,0.3884],[1.25,0.381],[1.3,0.3732],[1.35,0.3657],[1.4,0.358],[1.5,0.344],[1.55,0.3376],[1.6,0.3315],[1.65,0.326],[1.7,0.3209],[1.75,0.316],[1.8,0.3117],[1.85,0.3078],[1.9,0.3042],[1.95,0.301],[2.0,0.298],[2.05,0.2951],[2.1,0.2922],[2.15,0.2892],[2.2,0.2864],[2.25,0.2835],[2.3,0.2807],[2.35,0.2779],[2.4,0.2752],[2.45,0.2725],[2.5,0.2697],[2.55,0.267],[2.6,0.2643],[2.65,0.2615],[2.7,0.2588],[2.75,0.2561],[2.8,0.2533],[2.85,0.2506],[2.9,0.2479],[2.95,0.2451],[3.0,0.2424],[3.1,0.2368],[3.2,0.2313],[3.3,0.2258],[3.4,0.2205],[3.5,0.2154],[3.6,0.2106],[3.7,0.206],[3.8,0.2017],[3.9,0.1975],[4.0,0.1935],[4.2,0.1861],[4.4,0.1793],[4.6,0.173],[4.8,0.1672],[5.0,0.1618]]};
 function cd(tab,m){var T=DRAG[tab];if(m<=T[0][0])return T[0][1];for(var i=1;i<T.length;i++){if(m<=T[i][0]){var a=T[i-1],b=T[i];return a[1]+(b[1]-a[1])*(m-a[0])/(b[0]-a[0])}}return T[T.length-1][1]}
@@ -108,5 +110,37 @@ function go(e){
   document.getElementById('out').scrollIntoView({behavior:'smooth'});
   return false;
 }
+
+/* Premium saved loads (synced to the account) */
+var SB_URL='https://kwsdkzuqknpaonfhlxjx.supabase.co',SB_KEY='sb_publishable_kysx2jywIXXCCR0SMKNzkg_h63mtgsE',SB=null,SESS=null,PRO=false,LOADS=[],lastTok='',lmsg='',MAXL=25;
+function esc(x){return String(x).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function snap(){var o={};IDS.forEach(function(k){o[k]=document.getElementById(k).value});return o}
+function loadsUI(){
+  var b=document.getElementById('lb');
+  if(!SESS){b.innerHTML='<p class="lnote">Premium: save your loads to your account and use them on any device. Your last entries are still remembered on this device for free.</p><a href="/#authBox">Sign in</a> &nbsp; <a href="/#pricing">See Premium</a>';return}
+  if(!PRO){b.innerHTML='<p class="lnote">Saved loads are a Premium feature. They sync to your account, so your rifle and ammo are ready on any device.</p><a href="/#pricing">See Premium</a>';return}
+  var h='<div class="lsave"><input id="ln" maxlength="60" placeholder="Name (ex: Elk .308)" aria-label="Load name"><button type="button" id="lsb">Save this load</button></div>'+(lmsg?'<p class="lnote">'+esc(lmsg)+'</p>':'');
+  if(!LOADS.length)h+='<p class="lnote">No saved loads yet. Enter your numbers above and tap Save.</p>';
+  LOADS.forEach(function(l){var d=l.data||{};h+='<div class="lrow"><button type="button" class="use" data-id="'+esc(l.id)+'">'+esc(l.name)+'<small>'+esc(d.wt||'?')+' gr, BC '+esc(d.bc||'?')+' '+esc(d.tab||'')+', '+esc(d.mv||'?')+' fps, '+esc(d.zero||'?')+' yd zero</small></button><button type="button" class="del" data-id="'+esc(l.id)+'" aria-label="Delete '+esc(l.name)+'">Delete</button></div>'});
+  b.innerHTML=h;
+}
+function pullLoads(){if(!SB)return;SB.from('ballistic_loads').select('id,name,data,created_at').order('created_at',{ascending:false}).then(function(r){if(!r.error){LOADS=r.data||[];loadsUI()}})}
+function checkPro(){
+  var tok=SESS?SESS.access_token:'';if(tok===lastTok)return;lastTok=tok;PRO=false;LOADS=[];loadsUI();
+  if(!SESS)return;
+  fetch('/.netlify/functions/status',{headers:{Authorization:'Bearer '+tok}}).then(function(r){return r.json()}).then(function(j){PRO=!!j.premium;loadsUI();if(PRO)pullLoads()}).catch(function(){})
+}
+document.getElementById('lb').addEventListener('click',function(e){
+  var t=e.target;if(t.id=='lsb'){
+    var o=snap();if(!(parseFloat(o.bc)>0&&parseFloat(o.mv)>0)){lmsg='Fill in BC and velocity first.';loadsUI();return}
+    if(LOADS.length>=MAXL){lmsg='You can save up to '+MAXL+' loads. Delete one first.';loadsUI();return}
+    var nm=(document.getElementById('ln').value||'').trim().slice(0,60)||((o.wt?o.wt+' gr, ':'')+o.mv+' fps');
+    SB.from('ballistic_loads').insert({name:nm,data:o}).select('id,name,data,created_at').single().then(function(r){if(r.error||!r.data){lmsg='Could not save right now. Try again.';loadsUI();return}LOADS.unshift(r.data);lmsg='Saved.';loadsUI();ping('ballistics_save')});return}
+  var id=t.dataset&&t.dataset.id;if(!id)return;
+  if(t.classList.contains('del')){SB.from('ballistic_loads').delete().eq('id',id).then(function(r){if(!r.error){LOADS=LOADS.filter(function(l){return l.id!==id});lmsg='';loadsUI()}});return}
+  if(t.classList.contains('use')||t.closest('.use')){var l=LOADS.filter(function(x){return x.id===id})[0];if(!l)return;IDS.forEach(function(k){if(l.data[k]!=null)document.getElementById(k).value=l.data[k]});document.getElementById('f').requestSubmit?document.getElementById('f').requestSubmit():go({preventDefault:function(){}})}
+});
+loadsUI();
+try{if(window.supabase){SB=window.supabase.createClient(SB_URL,SB_KEY);SB.auth.getSession().then(function(r){SESS=r.data.session;checkPro()});SB.auth.onAuthStateChange(function(ev,sess){SESS=sess;checkPro()})}}catch(e){}
 document.getElementById('seg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;U=b.dataset.u;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});render()});
 </script></body></html>
